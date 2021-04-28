@@ -1,0 +1,42 @@
+.container__staff{
+    min-height: 300px;
+    max-height: 700px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+    display:flex;
+    justify-content: center;
+}
+
+.block__staff{
+    min-height: 300px;
+    height: fit-content;
+    max-height: 700px;
+    width: 100%;
+    background-color:indianred;
+    margin:0 20px;
+    overflow: scroll;
+    padding: 0 50px;
+    flex:0.7
+}
+
+.content__staff{
+    width:100%;
+    display:flex;
+    flex-direction: row;
+    margin:20px 0;
+    justify-content:space-between;
+    align-items: center;
+    border:1px solid black;
+    height: 40px;
+    background-color: white;
+    padding: 0 10px
+}
+
+.button__staff{
+    width:20%;
+    height: 30px;
+    background-color: rgb(233, 186, 186);
+    cursor: pointer;
+    font-size: 30%;
+}

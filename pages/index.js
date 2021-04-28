@@ -1,65 +1,51 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { addshop } from "../redux/actions/shop";
+import Sidebar from "../components/layout/Sidebar";
+import { connect } from "react-redux";
+import { useRouter } from "next/router";
+function Home(props) {
+  const router = useRouter();
+  const [shopList, setShopList] = useState([]);
+  const [addNewShop, setAddNewShop] = useState(true);
+  const onSelectSidebar = (shopId, shopName) => {
+    router.push(`/shop/manage/${shopName}/${shopId}`);
+  };
+  useEffect(() => {
+    axios({
+      url: `http://localhost:8000/api/shop/getShop`,
+      method: "post",
+      data: { id: props.user.id },
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) => {
+      setShopList(res.data);
+      res.data.map((shop) => {
+        if (shop.role === "admin") setAddNewShop(false);
+        props.addshop(shop);
+      });
+    });
+  }, []);
 
-export default function Home() {
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
+    <div className="container">
+      <Sidebar
+        shopList={shopList}
+        addNewShop={addNewShop}
+        onSelectSidebar={onSelectSidebar}
+      />
     </div>
-  )
+  );
 }
+
+const MapStatetoProps = (state) => ({
+  user: state.user,
+  shop: state.shop,
+});
+
+const MapDispatchToProps = {
+  addshop: addshop,
+};
+
+export default connect(MapStatetoProps, MapDispatchToProps)(Home);

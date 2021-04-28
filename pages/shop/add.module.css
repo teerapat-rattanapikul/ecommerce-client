@@ -1,0 +1,46 @@
+.contianer__add{
+    width: 30%;
+    margin: 0 auto;
+    background-color: rgb(179, 179, 179);
+    display: flex;
+    align-items: space-around;
+    flex-direction: column;
+    justify-content:center;
+    padding: 0 40px;
+}
+
+.text__add{
+    margin: 10px 0;
+    font-size: 20px;
+    font-weight: bold;
+    color:rgb(65, 64, 64);
+    flex-wrap: wrap;
+}
+
+.title__add{
+    flex:0.4;
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+}
+.input__add{
+    height: 40px;
+    background-color: rgb(206, 206, 206);
+    color:black;
+    padding:0 10px;
+    font-size: 1rem;
+}
+
+.submit__add{
+    margin:20px 0;
+    align-self: center;
+    width: 100%;
+    height: 10%;
+    background-color: rgb(139, 139, 139);;
+}
+.error__add{
+    text-align: center;
+    width: 100%;
+    background-color: red;
+    color:white
+}

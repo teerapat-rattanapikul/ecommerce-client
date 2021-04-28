@@ -1,0 +1,18 @@
+.navbar{
+    display:flex;
+    align-items: center;
+    width: 100%;
+    /* min-width: 960px; */
+    /* min-height: 100px; */
+    height: 100px;
+    max-height: 300px;
+    background-color: transparent;
+    overflow:auto
+}
+
+.container__navbar{
+    display: flex;
+    margin-right: 10px;
+    width: 100%;
+    justify-content: flex-end;
+}

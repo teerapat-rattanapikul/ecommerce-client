@@ -1,0 +1,13 @@
+.container__order{
+    width:80%;
+    margin:0 auto;
+    background-color: chocolate;
+    height: fit-content;
+    overflow: scroll;
+    /* max-height: 700px; */
+}
+
+.detail__image{
+    width: 50%;
+    height: 50%;
+}
