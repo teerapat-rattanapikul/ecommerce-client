@@ -1,0 +1,36 @@
+.container__menu{
+    margin: 0 auto;
+    width: 97%;
+    /* display:flex; */
+    justify-content:center;
+    flex-wrap: wrap;
+    justify-content:left;
+    /* padding-left:2% */
+}
+.block__item{
+    margin:9px;
+    background-color: #8a9bae;
+    width: 400px;
+    height: 300px;
+    color:#1f3140;
+    font-size: 30px;
+}
+
+.block__item:hover{
+    width: 390px;
+    height: 290px;
+}
+
+
+
+@media only screen and (max-width:1024px) {
+    .container__menu{
+        margin: 0 auto;
+        width: 97%;
+        display:flex;
+        justify-content:center;
+        flex-wrap: wrap;
+        justify-content:center;
+    }
+    
+  }

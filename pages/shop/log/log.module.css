@@ -1,0 +1,39 @@
+.container__log{
+    width:80%;
+    background-color: azure;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items:center;
+    height: fit-content;
+    min-height: 300px;
+    max-height: 700px;
+    overflow: auto;
+}
+
+.bar__log{
+    width: 100%;
+    display:flex;
+}
+.contentBox__log{
+    width: 100%;
+    min-height: 300px;
+    height: auto;
+    margin:10px 0;
+}
+
+.mainContent__log{
+    display:flex;
+    justify-content: space-between;
+    margin:5px 0;
+    width: 100%;
+    border:1px solid black
+}
+
+.button__log{
+    width: 50%;
+    background-color: bisque;
+    cursor: pointer;
+}

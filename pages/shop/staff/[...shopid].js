@@ -11,6 +11,7 @@ const staffManage = (props) => {
   const [staffList, setStaffList] = useState([]);
 
   useEffect(() => {
+    window.scrollTo(0, 250);
     if (Object.keys(router.query).length > 0) {
       axios({
         url: `http://localhost:8000/api/user/getUsertoHire`,
@@ -47,7 +48,7 @@ const staffManage = (props) => {
   };
 
   return (
-    <div className="container">
+    <div className="container container  shadow  bg-body rounded">
       <div className={classes.container__staff}>
         <div className={classes.block__staff}>
           {user.map((USER) => {

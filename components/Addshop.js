@@ -2,6 +2,10 @@ import classes from "./Addshop.module.css";
 import { connect } from "react-redux";
 import { useRouter } from "next/router";
 
+const styles = {
+  boostrap: "btn btn-outline-light",
+  "addshop.module": classes.button__addshop,
+};
 const Addshop = () => {
   const router = useRouter();
 
@@ -9,11 +13,12 @@ const Addshop = () => {
     router.push("/shop/add");
   };
   return (
-    <div className={classes.container__addshop}>
-      <button className={classes.button__addshop} onClick={addShop}>
-        Add your shop
-      </button>
-    </div>
+    <button
+      className={styles["boostrap"] + " " + styles["addshop.module"]}
+      onClick={addShop}
+    >
+      +
+    </button>
   );
 };
 

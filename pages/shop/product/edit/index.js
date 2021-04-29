@@ -2,23 +2,24 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-
+import classes from "./edit.module.css";
 const EditProduct = (props) => {
   const router = useRouter();
-  const [image, setImage] = useState(props.product.product.image);
+  const [image, setImage] = useState(
+    `http://localhost:8000/${props.product.product.image}`
+  );
   const [imageFile, setImageFile] = useState("");
   const [productName, setProductName] = useState(props.product.product.name);
   const [productDetail, setProductDetail] = useState(
     props.product.product.detail
   );
+  const [productStatus, setProductStatus] = useState(
+    props.product.product.status
+  );
   const [price, setPrice] = useState(props.product.product.price);
   const [amount, setAmount] = useState(props.product.product.amount);
   const [productAdd, setProductAdd] = useState(true);
   const [updateImage, setUpdateImage] = useState(false);
-
-  useEffect(() => {
-    console.log(productName, productDetail, price, amount, imageFile);
-  }, []);
   const editProduct = () => {
     var formData = new FormData();
     if (
@@ -33,12 +34,13 @@ const EditProduct = (props) => {
         formData.append("productImage", imageFile);
       } else {
       }
-      formData.append("image", image);
+      formData.append("image", props.product.product.image);
       formData.append("productId", props.product.product.id);
       formData.append("productName", productName);
       formData.append("productDetail", productDetail);
       formData.append("productPrice", parseInt(price));
       formData.append("productAmount", parseInt(amount));
+      formData.append("productStatus", productStatus);
       axios({
         url: `http://localhost:8000/api/product/updateProduct`,
         method: "post",
@@ -54,55 +56,109 @@ const EditProduct = (props) => {
     }
   };
 
+  const preViewImage = (file) => {
+    const url = URL.createObjectURL(file);
+    setImage(url);
+  };
+
   return (
     <div className="container">
-      this is edit product
-      <div>
-        <label>Product Name: </label>
-        <input
-          type="text"
-          value={productName}
-          placeholder="type product name"
-          onChange={(e) => {
-            setProductName(e.target.value);
-          }}
-        />
-        <label>Product Detail: </label>
-        <input
-          type="text"
-          value={productDetail}
-          placeholder="type product detail"
-          onChange={(e) => {
-            setProductDetail(e.target.value);
-          }}
-        />
-        <label>Price: </label>
-        <input
-          type="text"
-          value={price}
-          placeholder="type price of product"
-          onChange={(e) => {
-            setPrice(e.target.value);
-          }}
-        />
-        <label>Amount</label>
-        <input
-          type="text"
-          value={amount}
-          placeholder="type amont of product"
-          onChange={(e) => {
-            setAmount(e.target.value);
-          }}
-        />
-        <input
-          type="file"
-          onChange={(e) => {
-            setUpdateImage(true);
-            setImageFile(e.target.files[0]);
-          }}
-        />
-        <button onClick={editProduct}>save</button>
-        {!productAdd ? <div>Please type all input</div> : null}
+      <div className={classes.contianer__edit}>
+        <div className="input-group mb-3">
+          <span className="input-group-text">ชื่อผลิตภัณฑ์</span>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="กรุณาพิมพ์ชื่อผลิตภัณฑ์"
+            value={productName}
+            onChange={(e) => {
+              setProductName(e.target.value);
+            }}
+          />
+        </div>
+        <div className="input-group mb-3">
+          <span className="input-group-text">คำอธิบายเพิ่มเติม</span>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="กรุณาพิมพ์คำอธิบาย"
+            value={productDetail}
+            onChange={(e) => {
+              setProductDetail(e.target.value);
+            }}
+          />
+        </div>
+        <div className="input-group mb-3">
+          <span className="input-group-text">ราคาต่อชิ้น</span>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="กรุณาพิมพ์ราคาสินค้า"
+            value={price}
+            onChange={(e) => {
+              setPrice(e.target.value);
+            }}
+          />
+          <span className="input-group-text">บาท</span>
+        </div>
+        <div className="input-group mb-3">
+          <span className="input-group-text">จำนวนสินค้าที่จำหน่าย</span>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="กรุณาพิมพ์จำนวนสินค้า"
+            value={amount}
+            onChange={(e) => {
+              setAmount(e.target.value);
+            }}
+          />
+          <span className="input-group-text">ชิ้น</span>
+        </div>
+        <div className="input-group mb-3">
+          <span className="input-group-text">สถานะสินค้า</span>
+          <div
+            className={classes.checkbok__edit + " " + "form-check form-switch"}
+          >
+            <input
+              className={"form-check-input"}
+              type="checkbox"
+              style={{ height: "30px", width: "70px", margin: "0 20px" }}
+              checked={productStatus}
+              onChange={() => {
+                setProductStatus(!productStatus);
+              }}
+            />
+            <label className="form-check-label">
+              {productStatus ? "วางจำหน่ายสินค้า" : "ยังไม่ได้วางจำหน่าย"}
+            </label>
+          </div>
+        </div>
+        <span className="input-group-text">รูปภาพผลิตภัณฑ์</span>
+        <img className={classes.image__edit} src={image} />
+        <div className="input-group mb-3 mt-3">
+          <span className="input-group-text primary">เลือกรูปภาพสินค้า</span>
+          <input
+            type="file"
+            className="form-control"
+            onChange={(e) => {
+              setUpdateImage(true);
+              preViewImage(e.target.files[0]);
+              setImageFile(e.target.files[0]);
+            }}
+          />
+        </div>
+
+        <button onClick={editProduct} className="btn btn-primary fs-5">
+          บันทึกการแก้ไข
+        </button>
+
+        <div>
+          {!productAdd ? (
+            <label className={classes.alert__addproduct + " " + "bg-warning "}>
+              กรุณาใส่ข้อมูลให้ครบทุกช่อง
+            </label>
+          ) : null}
+        </div>
       </div>
     </div>
   );

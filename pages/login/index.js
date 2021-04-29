@@ -42,7 +42,7 @@ const Login = (props) => {
   };
   return (
     <Fragment>
-      <div className="container">
+      <div className="container container  shadow  bg-body rounded">
         <div className={classes.form__login}>
           <label className={classes.title__login}>
             {login ? "ACCOUNT LOGIN" : "ACCOUNT REGISTER"}

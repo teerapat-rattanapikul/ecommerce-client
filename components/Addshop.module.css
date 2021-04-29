@@ -6,10 +6,10 @@
 
 
 .button__addshop{
-    width: 100%;
-    height: 40px;
-    margin-top: 10px;
-    overflow: hidden;
-    cursor: pointer;
-    background-color: greenyellow;
+    margin:9px;
+    background-color: #dab388;
+    width: 400px;
+    height: 300px;
+    color:#1f3140;
+    font-size: 100px
 }

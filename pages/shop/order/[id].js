@@ -10,6 +10,7 @@ const Order = (props) => {
   const [orderStatus, setOrderStatus] = useState("");
   const [updateStatus, setUpdateStatus] = useState(false);
   useEffect(() => {
+    window.scrollTo(0, 250);
     if (id) {
       axios({
         url: `http://localhost:8000/api/order/getAll`,
@@ -19,6 +20,7 @@ const Order = (props) => {
           "Content-Type": "application/json",
         },
       }).then((res) => {
+        console.log(res);
         setOrderList(res.data);
       });
     }
@@ -32,13 +34,14 @@ const Order = (props) => {
         "Content-Type": "application/json",
       },
     }).then((res) => {
+      console.log(res);
       const orderIndex = orderList.findIndex((order) => order.id === orderId);
       orderList[orderIndex].status = orderStatus;
       setOrderList([...orderList]);
     });
   };
   return (
-    <div className="container">
+    <div className="container container  shadow  bg-body rounded">
       <div className={classes.container__order}>
         {orderList.map((order) => (
           <div key={order.id}>
@@ -67,7 +70,7 @@ const Order = (props) => {
                       onChange={(e) => {
                         setOrderStatus(e.target.value);
                       }}
-                      value={order.status}
+                      value={orderStatus}
                     >
                       <option value="Paid">Paid</option>
                       <option value="Shipping">Shipping</option>

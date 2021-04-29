@@ -1,7 +1,7 @@
 .container__productlist{
     margin:0 auto;
-    background-color: blueviolet;
-    width: 80%;
+    background-color: #CDD8E1;
+    width: 70%;
     display: flex;
     flex-direction: column;
     padding: 15px;
@@ -9,5 +9,19 @@
     max-height: 800px;
     height: fit-content;
     overflow: scroll;
-    padding: 20px;
+    padding: 50px;
+    text-align: center;
+    border-radius: 10px;
+    position:relative
+}
+
+.button__productList{
+    background-color: #444454;
+    color: white;
+    font-size: 14px;
+    width: 150px;
+    position:absolute;
+    right: 0.5%;
+    top: 1%;
+
 }

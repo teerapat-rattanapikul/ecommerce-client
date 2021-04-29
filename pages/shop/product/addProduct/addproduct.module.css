@@ -1,0 +1,16 @@
+.container__addproduct{
+    width: 50%;
+    margin:50px auto;
+    padding :30px;
+    display:flex;
+    flex-direction: column; 
+    justify-content: center; 
+}
+
+
+.alert__addproduct{
+    margin:20px 0;
+    text-align: center;
+    height: 30px;
+    font-size: 20px;
+}

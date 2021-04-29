@@ -27,7 +27,7 @@ const AddShop = (props) => {
   };
 
   return (
-    <div className="container">
+    <div className="container container  shadow  bg-body rounded">
       <div className={classes.contianer__add}>
         <label className={classes.title__add}>Add shop</label>
         <label className={classes.text__add}>Shop name:</label>

@@ -2,13 +2,14 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { addshop } from "../redux/actions/shop";
 import Sidebar from "../components/layout/Sidebar";
+import Menu from "../components/layout/Menu";
 import { connect } from "react-redux";
 import { useRouter } from "next/router";
 function Home(props) {
   const router = useRouter();
   const [shopList, setShopList] = useState([]);
   const [addNewShop, setAddNewShop] = useState(true);
-  const onSelectSidebar = (shopId, shopName) => {
+  const onSelect = (shopId, shopName) => {
     router.push(`/shop/manage/${shopName}/${shopId}`);
   };
   useEffect(() => {
@@ -29,12 +30,13 @@ function Home(props) {
   }, []);
 
   return (
-    <div className="container">
-      <Sidebar
+    <div className="container  shadow  bg-body rounded">
+      {/* <Sidebar
         shopList={shopList}
         addNewShop={addNewShop}
         onSelectSidebar={onSelectSidebar}
-      />
+      /> */}
+      <Menu shopList={shopList} addNewShop={addNewShop} onSelect={onSelect} />
     </div>
   );
 }
