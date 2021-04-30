@@ -2,6 +2,8 @@ import { LOGIN } from "../actions/user";
 
 const initialState = {
   id: 0,
+  name: "",
+  token: "",
   status: false,
 };
 
@@ -11,6 +13,8 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         id: action.payload.id,
+        name: action.payload.name,
+        token: action.payload.token,
         status: action.payload.status,
       };
 

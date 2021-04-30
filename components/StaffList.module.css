@@ -1,7 +1,55 @@
 .container__stafflist{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-width: 200px;
     width:30%;
-    background-color: blanchedalmond;
+    min-height: 300px;
+    height: 100%;
+    max-height: 700px;
+    background-color: #8a9bae;
     position: relative;
     right: 0;
     top: 50;
+    box-shadow: 5px 3px 10px #becddb;
+    margin: 10px 10px;
+    border-radius: 5px;
+    padding:50px;
+    overflow: auto;
+}
+
+.title__staff{
+    position:absolute;
+    padding:5px;
+    width: 100%;
+    height: fit-content;
+    top: 0;
+    left: 0;
+    color:white;
+    text-align: center;
+    background-color:#3c6084
+
+    ;
+}
+
+
+.content__staffList{
+    margin:10px 0;
+    height: 40px;
+    width: 80%;
+    background-color: bisque;
+    border-radius: 3px;
+    padding: 8px;
+    box-shadow: 0px 1px 10px #8b582a;
+    font-weight: bold;
+}
+
+.minssing__staffList{
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
 }

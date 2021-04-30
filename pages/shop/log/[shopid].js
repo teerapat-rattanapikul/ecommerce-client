@@ -8,11 +8,11 @@ const log = () => {
   const [userLogSelect, setUserLogSelect] = useState(true);
   const [orderDetailLog, setOrderDetailLog] = useState([]);
   const [orderLogSelect, setOrderLogSelect] = useState(true);
+  const [productLog, setProductLog] = useState("");
   const [orderLog, setOrderLog] = useState([]);
   const router = useRouter();
   const { shopid } = router.query;
   useEffect(() => {
-    window.scrollTo(0, 250);
     if (shopid) {
       axios({
         url: `http://localhost:8000/api/user/log`,
@@ -78,68 +78,121 @@ const log = () => {
     <div className="container container  shadow  bg-body rounded">
       <div className={classes.container__log}>
         <div className={classes.bar__log}>
-          <input
-            type="submit"
-            className={classes.button__log}
-            value="staff"
+          <button
+            className={
+              userLogSelect
+                ? classes.button__active
+                : classes.button__log + " " + "btn "
+            }
             onClick={() => {
               setUserLogSelect(true);
             }}
-          />
-          <input
-            type="submit"
-            className={classes.button__log}
-            value="order"
+          >
+            พนักงาน
+          </button>
+          <button
+            className={
+              !userLogSelect
+                ? classes.button__active
+                : classes.button__log + " " + "btn "
+            }
             onClick={() => {
               setUserLogSelect(false);
               setOrderLogSelect(true);
             }}
-          />
+          >
+            คำสั่งซื้อ
+          </button>
         </div>
-        {userLogSelect ? (
-          <div className={classes.contentBox__log}>
-            <div className={classes.mainContent__log}>
-              <label>staff email</label>
-              <label>login at</label>
-            </div>
-            {userLog.map((user) => (
-              <div key={user.id} className={classes.mainContent__log}>
-                <label>{user.email}</label>
-                <label>{dayMonthYear(user.updatedAt)}</label>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <Fragment>
-            {orderLogSelect ? (
-              <div className={classes.contentBox__log}>
-                {orderLog.map((order) => (
-                  <div key={order.id} className={classes.mainContent__log}>
-                    <input
-                      type="submit"
-                      value={order.product.name}
-                      onClick={() => {
-                        orderLogDetail(order.id);
-                      }}
-                    />
-                  </div>
-                ))}
-              </div>
+        <table
+          className={
+            classes.contentBox__log + " " + "table table-striped text-center "
+          }
+        >
+          <thead>
+            {userLogSelect ? (
+              <tr>
+                <th scope="col">รายชื่อพนักงาน</th>
+                <th scope="col">เวลาเข้าใช้งาน</th>
+              </tr>
             ) : (
-              <div className={classes.contentBox__log}>
-                {orderDetailLog.map((orderLog) => (
-                  <div key={orderLog.id} className={classes.mainContent__log}>
-                    <label>{orderLog.order.product.name}</label>
-                    <label>
-                      {orderLog.oldStatus} {"-->"} {orderLog.newStatus}
-                    </label>
-                    <label>{dayMonthYear(orderLog.createdAt)}</label>
-                  </div>
-                ))}
-              </div>
+              <Fragment>
+                {orderLogSelect ? (
+                  <tr>
+                    <th scope="col">รายชื่อผลิตภัณฑ์</th>
+                    <th scope="col">การจัดการ</th>
+                  </tr>
+                ) : (
+                  <tr>
+                    <th scope="col">รายชื่อผลิตภัณฑ์</th>
+                    <th scope="col">การเปลี่ยนแปลงสถานะ</th>
+                    <th scope="col">เปลี่ยนสถานะโดย</th>
+                    <th scope="col">เวลาในการเปลี่ยนแปลง</th>
+                  </tr>
+                )}
+              </Fragment>
             )}
-          </Fragment>
-        )}
+          </thead>
+          {userLogSelect ? (
+            <tbody className={"align-middle "}>
+              {userLog.map((user) => (
+                <tr key={user.id}>
+                  <td>{user.email}</td>
+                  <td>{dayMonthYear(user.updatedAt)}</td>
+                </tr>
+              ))}
+            </tbody>
+          ) : (
+            <Fragment>
+              {orderLogSelect ? (
+                <tbody className={"align-middle "}>
+                  {orderLog.map((order) => (
+                    <tr key={order.id}>
+                      <td>{order.product.name}</td>
+                      <td>
+                        <button
+                          onClick={() => {
+                            orderLogDetail(order.id);
+                            setProductLog(order.product.name);
+                          }}
+                        >
+                          ดูประวัติ
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              ) : (
+                <tbody className={"align-middle "}>
+                  {orderDetailLog.map((orderLog) => (
+                    <tr key={orderLog.id}>
+                      <td>{productLog}</td>
+                      <td>
+                        {orderLog.oldStatus} {"-->"} {orderLog.newStatus}
+                      </td>
+                      <td>{orderLog.user.email}</td>
+                      <td>{dayMonthYear(orderLog.createdAt)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              )}
+            </Fragment>
+          )}
+        </table>
+        <div className={classes.notfound__log}>
+          {userLogSelect && userLog.length === 0 ? (
+            <Fragment>
+              <img src="/not-found.svg" width={100} height={100} />
+              <span>ไม่มีประวัติ</span>
+            </Fragment>
+          ) : null}
+          {!userLogSelect && orderLog.length === 0 ? (
+            <Fragment>
+              <img src="/not-found.svg" width={100} height={100} />
+              <span>ไม่มีประวัติ</span>
+            </Fragment>
+          ) : null}
+        </div>
       </div>
     </div>
   );

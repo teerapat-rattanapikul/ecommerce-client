@@ -2,10 +2,7 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/shop/product/detail/[productid]": "pages/shop/product/detail/[productid].js",
-  "/shop/product/edit": "pages/shop/product/edit.js",
-  "/login": "pages/login.js",
   "/": "pages/index.js",
   "/shop/manage/[...shopid]": "pages/shop/manage/[...shopid].js",
-  "/shop/product/all/[shopid]": "pages/shop/product/all/[shopid].js"
+  "/login": "pages/login.js"
 }

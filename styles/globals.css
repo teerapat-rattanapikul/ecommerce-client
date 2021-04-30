@@ -35,11 +35,10 @@ a {
   }
   
 }
-.container::-webkit-scrollbar {   display: none; }.container {   -ms-overflow-style: none; }
 .container{
   border-radius: 15px;
   width: 90%;
-  margin: 25% auto;
+  margin: 15% auto;
   display: flex;
   background-color: white;
   flex-direction: column;
@@ -49,5 +48,9 @@ a {
   position: relative;
   padding:50px 0;
   overflow: auto;
+}
+
+.loading{
+  margin: auto auto;
 }
 

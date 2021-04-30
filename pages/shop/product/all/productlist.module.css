@@ -23,5 +23,12 @@
     position:absolute;
     right: 0.5%;
     top: 1%;
+}
 
+.empty__productList{
+    display: flex;
+    flex:1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }

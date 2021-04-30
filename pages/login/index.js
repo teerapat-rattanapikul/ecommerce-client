@@ -8,60 +8,99 @@ import { useRouter } from "next/router";
 const Login = (props) => {
   const [login, setLogin] = useState(true);
   const [errLogin, setErrLogin] = useState(false);
+  const [errMsg, setErrMsg] = useState("");
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
 
   if (props.user.status) {
     return <Redirect to="/" />;
   }
-
-  const handlerSubmit = () => {
-    let authAction = "login";
-    if (!login) {
-      authAction = "register";
-    }
-    axios({
-      url: `http://localhost:8000/api/user/${authAction}`,
-      method: "post",
-      data: { email: email, password: password },
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((res) => {
-      if (res.data.status === true) {
-        if (login) {
-          localStorage.setItem("token", res.data.dataValues.id);
-          props.userLogin(res.data.dataValues.id, true);
-        } else {
-        }
-      } else {
-        setErrLogin(true);
-      }
-    });
-    setEmail(""), setPassword("");
+  const validateEmail = (email) => {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
   };
+  const handlerSubmit = () => {
+    if (!validateEmail(email)) {
+      alert("อีเมลไม่ถูกต้อง");
+      return;
+    }
+    let authAction = "login";
+    let dataAuth = {
+      email: email,
+      password: password,
+    };
+    if (!login) {
+      if (name.trim === "") alert("กรุณาใส่ข้อมูลให้ครบ");
+      authAction = "register";
+      dataAuth["name"] = name;
+    }
+    if (email.trim === "" || password.trim() === "") {
+      alert("กรุณาใส่ข้อมูลให้ครบ");
+    } else {
+      axios({
+        url: `http://localhost:8000/api/user/${authAction}`,
+        method: "post",
+        data: dataAuth,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((res) => {
+        console.log(res);
+        if (res.data.status === true) {
+          if (login) {
+            localStorage.setItem("token", res.data.token);
+            props.userLogin(res.data.id, res.data.name, res.data.token, true);
+          } else {
+            setErrLogin(false);
+            alert("สมัครสมาชิกเรียบร้อย");
+            setLogin(!login);
+          }
+        } else {
+          setErrMsg(res.data.error);
+          setErrLogin(true);
+        }
+      });
+      setEmail(""), setPassword(""), setName("");
+    }
+  };
+
   return (
     <Fragment>
       <div className="container container  shadow  bg-body rounded">
         <div className={classes.form__login}>
           <label className={classes.title__login}>
-            {login ? "ACCOUNT LOGIN" : "ACCOUNT REGISTER"}
+            {login ? "เข้าสู่ระแบบ" : "สมัครสมาชิก"}
           </label>
-          <label className={classes.text__login}>Email :</label>
+          <label className={classes.text__login}> อีเมล :</label>
           <input
             type="text"
             className={classes.input__login}
-            placeholder="type your email"
+            placeholder="กรุณาใส่อีเมล"
             value={email}
             onChange={(e) => {
               setEmail(e.target.value);
             }}
           />
-          <label className={classes.text__login}>Password :</label>
+          {!login ? (
+            <Fragment>
+              <label className={classes.text__login}>ชื่อผู้ใช้งาน</label>
+              <input
+                type="text"
+                className={classes.input__login}
+                placeholder="กรุณาใส่ชื่อผู้ใช้งาน"
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
+              />
+            </Fragment>
+          ) : null}
+          <label className={classes.text__login}>รหัสผ่าน :</label>
           <input
             type="text"
-            className={classes.input__login}
-            placeholder="type your password"
+            className={classes.input__login + " " + classes.input_secure}
+            placeholder="กรุณาใส่รหัสผ่าน"
             value={password}
             onChange={(e) => {
               setPassword(e.target.value);
@@ -70,27 +109,26 @@ const Login = (props) => {
           <input
             type="submit"
             className={classes.submit__login}
-            value={login ? "login" : "register"}
+            value={login ? "เข้าสู่ระบบ" : "สมัครสมาชิก"}
             onClick={handlerSubmit}
           />
           <label style={{ textAlign: "center" }}>
-            Not have account?{" "}
+            {login ? "ท่านยังไม่ได้เป็นสมาชิกใช่ไหม? " : "มีบัญชีอยู่แล้ว "}
             <a
               style={{ color: login ? "red" : "green", cursor: "pointer" }}
               onClick={() => {
                 setErrLogin(false);
                 setEmail("");
                 setPassword("");
+                setName("");
                 setLogin(!login);
               }}
             >
-              {login ? "create" : "login"}
+              {login ? "สร้างเลย" : "เข้าสู่ระบบ"}
             </a>
           </label>
           {errLogin ? (
-            <div className={classes.error__login}>
-              Your Email or Password Wrong!!!
-            </div>
+            <div className={classes.error__login}>{errMsg}</div>
           ) : (
             <></>
           )}

@@ -9,6 +9,7 @@ const AddProduct = () => {
   const [productDetail, setProductDetail] = useState("");
   const [price, setPrice] = useState("");
   const [amount, setAmount] = useState("");
+  const [image, setImage] = useState("");
   const [productAdd, setProductAdd] = useState(true);
   const addProduct = () => {
     var formData = new FormData();
@@ -42,6 +43,10 @@ const AddProduct = () => {
     }
   };
 
+  const preViewImage = (file) => {
+    const url = URL.createObjectURL(file);
+    setImage(url);
+  };
   return (
     <div className="container container  shadow  bg-body rounded">
       <div className={classes.container__addproduct}>
@@ -95,12 +100,17 @@ const AddProduct = () => {
           />
           <span className="input-group-text">ชิ้น</span>
         </div>
+        <span className="input-group-text">รูปภาพผลิตภัณฑ์</span>
+        {image !== "" ? (
+          <img className={classes.image__product} src={image} />
+        ) : null}
         <div className="input-group mb-3">
           <span className="input-group-text primary">เลือกรูปภาพสินค้า</span>
           <input
             type="file"
             className="form-control"
             onChange={(e) => {
+              preViewImage(e.target.files[0]);
               setImageFile(e.target.files[0]);
             }}
           />

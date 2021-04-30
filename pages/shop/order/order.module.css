@@ -1,13 +1,33 @@
 .container__order{
-    width:80%;
     margin:0 auto;
-    background-color: chocolate;
+    background-color: #CDD8E1;
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    min-height: 350px;
+    max-height: 800px;
     height: fit-content;
-    overflow: scroll;
-    /* max-height: 700px; */
 }
 
 .detail__image{
-    width: 50%;
-    height: 50%;
+    width: 30%;
+    height: 30%;
+}
+
+.empty__order{
+    display: flex;
+    flex:1;
+    flex-direction: column;
+    justify-content: center;
+    margin:0 auto;
+}
+
+
+.status__order{
+    display:flex;
+    height: auto;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
 }

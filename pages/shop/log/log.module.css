@@ -1,6 +1,7 @@
 .container__log{
     width:80%;
-    background-color: azure;
+    background-color: #CDD8E1;
+    padding:20px;
     margin: 0 auto;
     text-align: center;
     display: flex;
@@ -19,8 +20,6 @@
 }
 .contentBox__log{
     width: 100%;
-    min-height: 300px;
-    height: auto;
     margin:10px 0;
 }
 
@@ -34,6 +33,27 @@
 
 .button__log{
     width: 50%;
-    background-color: bisque;
+    border:1px solid black;
     cursor: pointer;
+}
+
+.button__log:hover{
+    background-color: #3c6084;
+    color:white
+}
+
+.button__active{
+    width: 50%;
+    border:1px solid black;
+    cursor: pointer;
+    background-color: #3c6084;
+    color:white
+
+}
+
+.notfound__log{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }

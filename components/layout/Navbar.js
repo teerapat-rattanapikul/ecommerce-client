@@ -3,19 +3,20 @@ import Icon from "../ui/Icon";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { userLogin } from "../../redux/actions/user";
+import { userLogin, tokenFetch } from "../../redux/actions/user";
+import { addshop } from "../../redux/actions/shop";
 import { FiLogOut } from "react-icons/fi";
 import Redirect from "../Redirect";
 const Navbar = (props) => {
   const router = useRouter();
   useEffect(() => {
-    const login = localStorage.getItem("token");
-    if (login) {
-      props.userLogin(login, true);
+    const token = localStorage.getItem("token");
+    if (token) {
+      props.tokenFetch(token);
     }
   }, []);
-  if (!props.user.status) {
-    return <Redirect to="/login" />;
+  if (props.user) {
+    // return <Redirect to={`/login`} />;
   }
   return (
     <div className={classes.navbar}>
@@ -37,9 +38,12 @@ const Navbar = (props) => {
 
 const MapStateToProps = (state) => ({
   user: state.user,
+  shpop: state.shop,
 });
 const MapDispatchToProps = {
   userLogin: userLogin,
+  tokenFetch: tokenFetch,
+  addshop: addshop,
 };
 
 export default connect(MapStateToProps, MapDispatchToProps)(Navbar);

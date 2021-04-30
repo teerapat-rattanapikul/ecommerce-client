@@ -38,21 +38,6 @@
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/shop/manage/[...shopid].js"
-    ],
-    "/shop/product/all/[shopid]": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/shop/product/all/[shopid].js"
-    ],
-    "/shop/product/detail/[productid]": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/shop/product/detail/[productid].js"
-    ],
-    "/shop/product/edit": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/shop/product/edit.js"
     ]
   },
   "ampFirstPages": []
