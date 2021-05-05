@@ -2,9 +2,6 @@ import classes from "./login.module.css";
 import axios from "axios";
 import { Fragment, useEffect, useState } from "react";
 import Redirect from "../../components/Redirect";
-import { connect } from "react-redux";
-import { userLogin } from "../../redux/actions/user";
-import { useRouter } from "next/router";
 const Login = (props) => {
   const [login, setLogin] = useState(true);
   const [errLogin, setErrLogin] = useState(false);
@@ -12,8 +9,14 @@ const Login = (props) => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [userLogin, setUserLogin] = useState(false);
 
-  if (props.user.status) {
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) setUserLogin(true);
+  }, []);
+
+  if (userLogin) {
     return <Redirect to="/" />;
   }
   const validateEmail = (email) => {
@@ -50,7 +53,8 @@ const Login = (props) => {
         if (res.data.status === true) {
           if (login) {
             localStorage.setItem("token", res.data.token);
-            props.userLogin(res.data.id, res.data.name, res.data.token, true);
+            setUserLogin(true);
+            window.location.href = "/";
           } else {
             setErrLogin(false);
             alert("สมัครสมาชิกเรียบร้อย");
@@ -67,10 +71,17 @@ const Login = (props) => {
 
   return (
     <Fragment>
-      <div className="container container  shadow  bg-body rounded">
+      <div
+        className="container container  shadow  bg-body rounded"
+        onKeyDown={(e) => {
+          if (e.code === "Enter") {
+            handlerSubmit();
+          }
+        }}
+      >
         <div className={classes.form__login}>
           <label className={classes.title__login}>
-            {login ? "เข้าสู่ระแบบ" : "สมัครสมาชิก"}
+            {login ? "เข้าสู่ระบบ" : "สมัครสมาชิก"}
           </label>
           <label className={classes.text__login}> อีเมล :</label>
           <input
@@ -138,12 +149,4 @@ const Login = (props) => {
   );
 };
 
-const MapStateToProps = (state) => ({
-  user: state.user,
-});
-
-const MapDispatchToProps = {
-  userLogin: userLogin,
-};
-
-export default connect(MapStateToProps, MapDispatchToProps)(Login);
+export default Login;

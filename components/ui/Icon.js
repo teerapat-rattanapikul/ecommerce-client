@@ -1,9 +1,8 @@
 import classes from "./Icon.module.css";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import Router from "next/router";
+import { useState } from "react";
 
-const Icon = (props) => {
+const Icon = () => {
   const [path, setPath] = useState("/");
   return (
     <Link href="/">

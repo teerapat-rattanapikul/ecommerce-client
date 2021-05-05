@@ -1,5 +1,6 @@
 import classes from "./Menu.module.css";
 import Addshop from "../Addshop";
+import Loading from "../ui/Loading";
 import { Fragment } from "react";
 const styles = {
   boostrap: "btn btn-outline-secondary",
@@ -8,7 +9,11 @@ const styles = {
 const Menu = (props) => {
   return (
     <div className={classes.container__menu}>
-      {props.shopList.length === 0 || props.addNewShop ? <Addshop /> : <></>}
+      {props.shopList.length === 0 || props.addNewShop ? (
+        <Addshop token={props.token} />
+      ) : (
+        <></>
+      )}
       <Fragment>
         {props.shopList.map((shop) => (
           <button

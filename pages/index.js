@@ -1,24 +1,33 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { addshop } from "../redux/actions/shop";
-import Loader from "react-loader-spinner";
 import Menu from "../components/layout/Menu";
-import { connect } from "react-redux";
+import Loading from "../components/ui/Loading";
 import { useRouter } from "next/router";
-import Redirect from "../components/Redirect";
+import jwt_decode from "jwt-decode";
 function Home(props) {
   const router = useRouter();
   const [shopList, setShopList] = useState([]);
+  const [token, setToken] = useState();
   const [loading, setLoading] = useState(true);
   const [addNewShop, setAddNewShop] = useState(true);
   const [time, setTime] = useState(false);
+
   const onSelect = (shopId, shopName) => {
-    router.push(`/shop/manage/${shopName}/${shopId}`);
+    router.push(
+      { pathname: `/shop/manage/${token}/${shopName}/${shopId}` },
+      undefined,
+      {
+        scroll: false,
+      }
+    );
   };
+
   useEffect(() => {
-    setTimeout(() => {
-      setTime(!time);
-    }, 3000);
+    setToken(localStorage.getItem("token"));
+    const timeoutId = setTimeout(() => setTime(!time), 3000);
+    return function cleanup() {
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   if (time) {
@@ -27,11 +36,13 @@ function Home(props) {
       router.replace("/login");
     }
   }
-  if (props.user.status && loading) {
+
+  if (token && loading) {
+    const decoded = jwt_decode(token);
     axios({
       url: `http://localhost:8000/api/shop/getShop`,
       method: "post",
-      data: { id: props.user.id },
+      data: { id: decoded.user.id },
       headers: {
         "Content-Type": "application/json",
       },
@@ -39,54 +50,25 @@ function Home(props) {
       setShopList(res.data);
       res.data.map((shop) => {
         if (shop.role === "admin") setAddNewShop(false);
-        props.addshop(shop);
-        setLoading(false);
       });
     });
+    setLoading(false);
   }
-  // useEffect(() => {
-  //   if (!props.user.status) setLoad(!load);
-  //   axios({
-  //     url: `http://localhost:8000/api/shop/getShop`,
-  //     method: "post",
-  //     data: { id: props.user.id },
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   }).then((res) => {
-  //     setShopList(res.data);
-  //     res.data.map((shop) => {
-  //       if (shop.role === "admin") setAddNewShop(false);
-  //       props.addshop(shop);
-  //     });
-  //   });
-  // }, []);
 
   return (
     <div className="container  shadow  bg-body rounded">
       {loading ? (
-        <Loader
-          type="ThreeDots"
-          color="#8a9bae"
-          height={100}
-          width={100}
-          visible={loading}
-          className="loading"
-        />
+        <Loading loading={loading} />
       ) : (
-        <Menu shopList={shopList} addNewShop={addNewShop} onSelect={onSelect} />
+        <Menu
+          shopList={shopList}
+          addNewShop={addNewShop}
+          onSelect={onSelect}
+          token={token}
+        />
       )}
     </div>
   );
 }
 
-const MapStatetoProps = (state) => ({
-  user: state.user,
-  shop: state.shop,
-});
-
-const MapDispatchToProps = {
-  addshop: addshop,
-};
-
-export default connect(MapStatetoProps, MapDispatchToProps)(Home);
+export default Home;

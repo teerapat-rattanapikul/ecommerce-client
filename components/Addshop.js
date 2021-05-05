@@ -1,16 +1,13 @@
 import classes from "./Addshop.module.css";
-import { connect } from "react-redux";
 import { useRouter } from "next/router";
-
 const styles = {
   boostrap: "btn btn-outline-light",
   "addshop.module": classes.button__addshop,
 };
-const Addshop = () => {
+const Addshop = (props) => {
   const router = useRouter();
-
   const addShop = () => {
-    router.push("/shop/add");
+    router.push(`/shop/add/${props.token}`);
   };
   return (
     <button
@@ -22,8 +19,4 @@ const Addshop = () => {
   );
 };
 
-const MapStateToProps = (state) => ({
-  user: state.user,
-});
-
-export default connect(MapStateToProps)(Addshop);
+export default Addshop;

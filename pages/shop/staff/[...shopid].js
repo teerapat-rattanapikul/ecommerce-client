@@ -1,51 +1,43 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import classes from "./staff.module.css";
 import axios from "axios";
-import { connect } from "react-redux";
 import StaffList from "../../../components/StaffList";
 import Loader from "react-loader-spinner";
 import { BsPersonPlusFill } from "react-icons/bs";
+import jwt_decode from "jwt-decode";
 const staffManage = (props) => {
   const router = useRouter();
+  const { shopid } = router.query;
   const [user, setUser] = useState([]);
   const [hireUser, setHireUser] = useState([]);
   const [loading, setLoading] = useState(true);
   const [staffList, setStaffList] = useState([]);
 
-  // useEffect(() => {
-  //   if (Object.keys(router.query).length > 0) {
-  //     console.log("yeah");
-  //     axios({
-  //       url: `http://localhost:8000/api/user/getUsertoHire`,
-  //       method: "post",
-  //       data: { id: props.user.id, shopId: router.query.shopid[1] },
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     }).then((res) => {
-  //       console.log(res);
-  //       setUser(res.data.userList);
-  //       setHireUser(res.data.userList);
-  //       setStaffList(res.data.staffList);
-  //       console.log(user.length, staffList.length);
-  //     });
-  //   }
-  // }, [router.query]);
-  if (props.user.status && loading && Object.keys(router.query).length > 0) {
+  if (shopid && loading) {
+    const decoded = jwt_decode(shopid[0]);
+    const validToken = localStorage.getItem("token");
+    if (validToken !== shopid[0]) {
+      alert("คุณไม่มีสิทธิ๋ในการเข้าถึง");
+      router.replace("/login");
+    }
     axios({
       url: `http://localhost:8000/api/user/getUsertoHire`,
       method: "post",
-      data: { id: props.user.id, shopId: router.query.shopid[1] },
+      data: { userId: decoded.user.id, shopId: shopid[2] },
       headers: {
         "Content-Type": "application/json",
       },
     }).then((res) => {
-      console.log(res);
-      setUser(res.data.userList);
-      setHireUser(res.data.userList);
-      setStaffList(res.data.staffList);
-      setLoading(false);
+      if (!res.data) {
+        alert("คุณไม่มีสิทธิ์ในการเข้าถึงข้อมูล");
+        router.replace("/login");
+      } else {
+        setUser(res.data.userList);
+        setHireUser(res.data.userList);
+        setStaffList(res.data.staffList);
+        setLoading(false);
+      }
     });
   }
 
@@ -55,8 +47,8 @@ const staffManage = (props) => {
       method: "post",
       data: {
         userId: userId,
-        shopId: router.query.shopid[1],
-        shopName: router.query.shopid[0],
+        shopId: router.query.shopid[2],
+        shopName: router.query.shopid[1],
       },
       headers: {
         "Content-Type": "application/json",
@@ -119,7 +111,4 @@ const staffManage = (props) => {
   );
 };
 
-const MapStateToProps = (state) => ({
-  user: state.user,
-});
-export default connect(MapStateToProps)(staffManage);
+export default staffManage;

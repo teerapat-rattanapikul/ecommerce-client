@@ -1,14 +1,13 @@
 import classes from "./shopid.module.css";
 import { useRouter } from "next/router";
-import { connect } from "react-redux";
-import { Fragment, useEffect, useState } from "react";
-import Loader from "react-loader-spinner";
+import { Fragment, useState } from "react";
+import Loading from "../../../components/ui/Loading";
 import { AiOutlineUnorderedList } from "react-icons/ai";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { RiHistoryFill } from "react-icons/ri";
 import { HiOutlineShoppingBag } from "react-icons/hi";
 import axios from "axios";
-
+import jwt_decode from "jwt-decode";
 const styles = {
   "containter.manage": classes.container__shopid,
   "button.manage": classes.button__shopid,
@@ -18,40 +17,35 @@ const ShopDetail = (props) => {
   const router = useRouter();
   const [userRole, setUserRole] = useState("");
 
-  if (router.query.shopid && props.user.id && loading) {
-    if (Object.keys(props.shop.detail).length === 0) {
-      axios({
-        url: `http://localhost:8000/api/shop/getShopById`,
-        method: "post",
-        data: { shopId: router.query.shopid[1], userId: props.user.id },
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }).then((res) => {
-        setUserRole(res.data.role);
-      });
-    } else {
-      setUserRole(props.shop.detail[router.query.shopid[1]].role);
+  if (router.query.shopid && loading) {
+    const decoded = jwt_decode(router.query.shopid[0]);
+    const validToken = localStorage.getItem("token");
+    if (validToken !== router.query.shopid[0]) {
+      alert("คุณไม่มีสิทธิ๋ในการเข้าถึง");
+      router.replace("/login");
     }
+    axios({
+      url: `http://localhost:8000/api/shop/getShopById`,
+      method: "post",
+      data: { shopId: router.query.shopid[2], userId: decoded.user.id },
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) => {
+      setUserRole(res.data.role);
+    });
     setLoading(false);
   }
 
   return (
     <div className="container container  shadow  bg-body rounded">
       {loading ? (
-        <Loader
-          type="ThreeDots"
-          color="#8a9bae"
-          height={100}
-          width={100}
-          visible={loading}
-          className="loading"
-        />
+        <Loading loading={loading} />
       ) : (
         <Fragment>
           {router.query.shopid ? (
             <label className={classes.text__shopid}>
-              {router.query.shopid[0]}
+              {router.query.shopid[1]}
             </label>
           ) : null}
           <div className={styles["containter.manage"]}>
@@ -61,7 +55,15 @@ const ShopDetail = (props) => {
                   classes.button__shopid + " " + "btn btn-secondary btn-lg   "
                 }
                 onClick={() => {
-                  router.push(`/shop/order/${router.query.shopid[1]}`);
+                  router.push(
+                    {
+                      pathname: `/shop/order/${router.query.shopid[0]}/${router.query.shopid[2]}`,
+                    },
+                    undefined,
+                    {
+                      scroll: false,
+                    }
+                  );
                 }}
               >
                 คำสั่งซื้อ
@@ -72,7 +74,15 @@ const ShopDetail = (props) => {
                   classes.button__shopid + " " + "btn btn-secondary btn-lg"
                 }
                 onClick={() => {
-                  router.push(`/shop/product/all/${router.query.shopid[1]}`);
+                  router.push(
+                    {
+                      pathname: `/shop/product/all/${router.query.shopid[0]}/${router.query.shopid[2]}`,
+                    },
+                    undefined,
+                    {
+                      scroll: false,
+                    }
+                  );
                 }}
               >
                 จัดการสินค้า
@@ -86,7 +96,13 @@ const ShopDetail = (props) => {
                     }
                     onClick={() => {
                       router.push(
-                        `/shop/staff/${router.query.shopid[0]}/${router.query.shopid[1]}`
+                        {
+                          pathname: `/shop/staff/${router.query.shopid[0]}/${router.query.shopid[1]}/${router.query.shopid[2]}`,
+                        },
+                        undefined,
+                        {
+                          scroll: false,
+                        }
                       );
                     }}
                   >
@@ -98,7 +114,15 @@ const ShopDetail = (props) => {
                       classes.button__shopid + " " + "btn btn-secondary btn-lg"
                     }
                     onClick={() => {
-                      router.push(`/shop/log/${router.query.shopid[1]}`);
+                      router.push(
+                        {
+                          pathname: `/shop/log/${router.query.shopid[0]}/${router.query.shopid[2]}`,
+                        },
+                        undefined,
+                        {
+                          scroll: false,
+                        }
+                      );
                     }}
                   >
                     ประวัติ
@@ -114,9 +138,4 @@ const ShopDetail = (props) => {
   );
 };
 
-const MapStateToProps = (state) => ({
-  shop: state.shop,
-  user: state.user,
-});
-
-export default connect(MapStateToProps)(ShopDetail);
+export default ShopDetail;
