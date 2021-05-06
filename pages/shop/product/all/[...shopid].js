@@ -5,6 +5,7 @@ import classes from "./productlist.module.css";
 import Loading from "../../../../components/ui/Loading";
 import jwt_decode from "jwt-decode";
 import back from "../../manage/shopid.module.css";
+import { numberWithCommas } from "../../../../helppers/moneyFormat";
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -35,6 +36,7 @@ const ProductList = () => {
       }
     });
   }
+
   return (
     <div className="container">
       <a
@@ -69,8 +71,8 @@ const ProductList = () => {
                 {products.map((product) => (
                   <tr key={product.id}>
                     <td>{product.name}</td>
-                    <td>{product.price}</td>
-                    <td>{product.amount}</td>
+                    <td>{numberWithCommas(product.price)}</td>
+                    <td>{numberWithCommas(product.amount)}</td>
                     {product.status ? (
                       <td className="text-success">วางจำหน่าย</td>
                     ) : (

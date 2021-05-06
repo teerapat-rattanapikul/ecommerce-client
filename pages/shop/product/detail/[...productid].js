@@ -5,6 +5,8 @@ import classes from "./detail.module.css";
 import Loading from "../../../../components/ui/Loading";
 import jwt_decode from "jwt-decode";
 import back from "../../manage/shopid.module.css";
+import Image from "next/image";
+import { numberWithCommas } from "../../../../helppers/moneyFormat";
 const styles = "input-group-text fw-normal mb-2 d-inline-block text-truncate";
 const ProductDetail = (props) => {
   const router = useRouter();
@@ -31,7 +33,6 @@ const ProductDetail = (props) => {
         "Content-Type": "application/json",
       },
     }).then((res) => {
-      console.log(res.data);
       if (!res.data) {
         alert("คุณไม่มีสิทธิ์ในการเข้าถึงข้อมูล");
         router.replace("/login");
@@ -71,15 +72,14 @@ const ProductDetail = (props) => {
             </label>
             <label className={classes.detail__text}>
               <span className={styles}>ราคาต่อชิ้น</span>
-              {product.price} บาท
+              {numberWithCommas(product.price)} บาท
             </label>
             <label className={classes.detail__text}>
-              <span className={styles}>จำนวนชิ้น</span> {product.amount} ชิ้น
+              <span className={styles}>จำนวนชิ้น</span>{" "}
+              {numberWithCommas(product.amount)} ชิ้น
             </label>
             <label className={classes.detail__text}>
-              <span className={styles} style={{ maxWidth: "200px" }}>
-                สถานะสินค้า
-              </span>
+              <span className={styles}>สถานะสินค้า</span>
               {product.status ? (
                 <label style={{ color: "#26ff00" }}>วางจำหน่าย</label>
               ) : (

@@ -24,15 +24,15 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/shop/log/[...shopid]": [
+    "/login": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/shop/log/[...shopid].js"
+      "static/chunks/pages/login.js"
     ],
-    "/shop/product/addProduct/[...shopid]": [
+    "/shop/product/detail/[...productid]": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/shop/product/addProduct/[...shopid].js"
+      "static/chunks/pages/shop/product/detail/[...productid].js"
     ]
   },
   "ampFirstPages": []

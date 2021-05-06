@@ -6,15 +6,14 @@
     justify-content: center;
     min-height: 400px;
     height: fit-content;
-    overflow:scroll;
-    max-height: 800px;
+    max-height: auto;
     border-radius: 10px;
     flex-wrap: wrap;
 
 }
 
 .detail__image{
-    min-width: 280px;
+    min-width: 250px;
     height: 40%;
     width: 40%;
     margin:20px;

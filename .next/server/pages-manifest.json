@@ -2,6 +2,6 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/shop/product/addProduct/[...shopid]": "pages/shop/product/addProduct/[...shopid].js",
-  "/shop/log/[...shopid]": "pages/shop/log/[...shopid].js"
+  "/shop/product/detail/[...productid]": "pages/shop/product/detail/[...productid].js",
+  "/login": "pages/login.js"
 }

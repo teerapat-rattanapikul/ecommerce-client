@@ -20,6 +20,7 @@
 }
 .contentBox__log{
     width: 100%;
+    justify-content: center;
     margin:10px 0;
 }
 
@@ -53,6 +54,7 @@
 
 .notfound__log{
     display: flex;
+    flex: 1;
     flex-direction: column;
     justify-content: center;
     align-items: center;
