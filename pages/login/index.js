@@ -72,7 +72,7 @@ const Login = (props) => {
   return (
     <Fragment>
       <div
-        className="container container  shadow  bg-body rounded"
+        className={classes.container__login + " " + "container"}
         onKeyDown={(e) => {
           if (e.code === "Enter") {
             handlerSubmit();
@@ -86,7 +86,7 @@ const Login = (props) => {
           <label className={classes.text__login}> อีเมล :</label>
           <input
             type="text"
-            className={classes.input__login}
+            className={"form-label p-2"}
             placeholder="กรุณาใส่อีเมล"
             value={email}
             onChange={(e) => {
@@ -98,7 +98,7 @@ const Login = (props) => {
               <label className={classes.text__login}>ชื่อผู้ใช้งาน</label>
               <input
                 type="text"
-                className={classes.input__login}
+                className={"form-label p-2"}
                 placeholder="กรุณาใส่ชื่อผู้ใช้งาน"
                 value={name}
                 onChange={(e) => {
@@ -110,7 +110,7 @@ const Login = (props) => {
           <label className={classes.text__login}>รหัสผ่าน :</label>
           <input
             type="text"
-            className={classes.input__login + " " + classes.input_secure}
+            className={"form-label p-2" + " " + classes.input_secure}
             placeholder="กรุณาใส่รหัสผ่าน"
             value={password}
             onChange={(e) => {
@@ -119,7 +119,7 @@ const Login = (props) => {
           />
           <input
             type="submit"
-            className={classes.submit__login}
+            className={"btn btn-primary mt-3 mb-3"}
             value={login ? "เข้าสู่ระบบ" : "สมัครสมาชิก"}
             onClick={handlerSubmit}
           />

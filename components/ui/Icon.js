@@ -2,11 +2,14 @@ import classes from "./Icon.module.css";
 import Link from "next/link";
 import { useState } from "react";
 
-const Icon = () => {
-  const [path, setPath] = useState("/");
+const style = {
+  active: classes.active,
+  inactive: classes.icon,
+};
+const Icon = (props) => {
   return (
     <Link href="/">
-      <a className={classes.icon}>Merchance</a>
+      <a className={props.scroll ? style.inactive : style.active}>Merchance</a>
     </Link>
   );
 };

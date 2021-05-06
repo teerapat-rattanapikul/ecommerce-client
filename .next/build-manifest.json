@@ -14,11 +14,6 @@
     "static/development/_ssgManifest.js"
   ],
   "pages": {
-    "/": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/index.js"
-    ],
     "/_app": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
@@ -29,25 +24,15 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/shop/add/[id]": [
+    "/shop/log/[...shopid]": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/shop/add/[id].js"
+      "static/chunks/pages/shop/log/[...shopid].js"
     ],
-    "/shop/manage/[...shopid]": [
+    "/shop/product/addProduct/[...shopid]": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/shop/manage/[...shopid].js"
-    ],
-    "/shop/order/[...id]": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/shop/order/[...id].js"
-    ],
-    "/shop/product/detail/[...productid]": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/shop/product/detail/[...productid].js"
+      "static/chunks/pages/shop/product/addProduct/[...shopid].js"
     ]
   },
   "ampFirstPages": []

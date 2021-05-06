@@ -1,5 +1,5 @@
 .container__log{
-    width:80%;
+    width:90%;
     background-color: #CDD8E1;
     padding:20px;
     margin: 0 auto;
@@ -9,10 +9,10 @@
     justify-content: flex-start;
     align-items:center;
     height: fit-content;
-    min-height: 300px;
-    max-height: 700px;
+    min-height: 700px;
     overflow: auto;
 }
+
 
 .bar__log{
     width: 100%;

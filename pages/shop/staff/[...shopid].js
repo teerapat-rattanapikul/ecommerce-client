@@ -6,6 +6,7 @@ import StaffList from "../../../components/StaffList";
 import Loader from "react-loader-spinner";
 import { BsPersonPlusFill } from "react-icons/bs";
 import jwt_decode from "jwt-decode";
+import back from "../manage/shopid.module.css";
 const staffManage = (props) => {
   const router = useRouter();
   const { shopid } = router.query;
@@ -61,7 +62,15 @@ const staffManage = (props) => {
   };
 
   return (
-    <div className="container container  shadow  bg-body rounded">
+    <div className="container">
+      <a
+        className={back.back}
+        onClick={() => {
+          router.back();
+        }}
+      >
+        <h4>{"< ย้อนกลับ"}</h4>
+      </a>
       {!loading ? (
         <div className={classes.container__staff}>
           <div className={classes.block__staff}>

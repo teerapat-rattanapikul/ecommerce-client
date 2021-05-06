@@ -2,10 +2,7 @@ import "../styles/globals.css";
 import Navbar from "../components/layout/Navbar";
 import { Fragment } from "react";
 import Head from "next/head";
-import { wrapper } from "../redux/store";
-import { useRouter } from "next/router";
 function MyApp({ Component, pageProps }) {
-  const router = useRouter();
   return (
     <Fragment>
       <Head>
@@ -31,4 +28,4 @@ function MyApp({ Component, pageProps }) {
   );
 }
 
-export default wrapper.withRedux(MyApp);
+export default MyApp;

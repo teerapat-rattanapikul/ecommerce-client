@@ -4,6 +4,7 @@ import { useState } from "react";
 import classes from "./detail.module.css";
 import Loading from "../../../../components/ui/Loading";
 import jwt_decode from "jwt-decode";
+import back from "../../manage/shopid.module.css";
 const styles = "input-group-text fw-normal mb-2 d-inline-block text-truncate";
 const ProductDetail = (props) => {
   const router = useRouter();
@@ -42,7 +43,15 @@ const ProductDetail = (props) => {
   }
 
   return (
-    <div className="container container  shadow  bg-body rounded">
+    <div className="container">
+      <a
+        className={back.back}
+        onClick={() => {
+          router.back();
+        }}
+      >
+        <h4>{"< ย้อนกลับ"}</h4>
+      </a>
       {loading ? (
         <Loading loading={loading} />
       ) : (
@@ -53,7 +62,7 @@ const ProductDetail = (props) => {
           />
           <div className={classes.detail__content}>
             <label className={classes.detail__text}>
-              <span className={styles}>ชื่อผลิตภัณฑ์</span>
+              <span className={styles}>ชื่อสินค้า</span>
               {product.name}
             </label>
             <label className={classes.detail__text}>
@@ -69,12 +78,12 @@ const ProductDetail = (props) => {
             </label>
             <label className={classes.detail__text}>
               <span className={styles} style={{ maxWidth: "200px" }}>
-                สถานะผลิตภัณฑ์
+                สถานะสินค้า
               </span>
               {product.status ? (
-                <label className="text-success">วางจำหน่าย</label>
+                <label style={{ color: "#26ff00" }}>วางจำหน่าย</label>
               ) : (
-                <label className="text-danger">ยังไม่ได้วางจำหน่าย</label>
+                <label style={{ color: "#ff0000" }}>ยังไม่ได้วางจำหน่าย</label>
               )}
             </label>
 

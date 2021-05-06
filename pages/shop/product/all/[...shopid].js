@@ -4,6 +4,7 @@ import { useState } from "react";
 import classes from "./productlist.module.css";
 import Loading from "../../../../components/ui/Loading";
 import jwt_decode from "jwt-decode";
+import back from "../../manage/shopid.module.css";
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -35,7 +36,15 @@ const ProductList = () => {
     });
   }
   return (
-    <div className="container container  shadow  bg-body rounded">
+    <div className="container">
+      <a
+        className={back.back}
+        onClick={() => {
+          router.back();
+        }}
+      >
+        <h4>{"< ย้อนกลับ"}</h4>
+      </a>
       {loading ? (
         <Loading loading={loading} />
       ) : (

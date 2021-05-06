@@ -4,6 +4,12 @@ import { useState } from "react";
 import Loading from "../../../../components/ui/Loading";
 import classes from "./edit.module.css";
 import jwt_decode from "jwt-decode";
+import back from "../../manage/shopid.module.css";
+const style = {
+  forDeiv: "input-group mb-3 d-flex justify-content-center",
+  forSpan: "input-group-text d-inline-block text-truncate",
+};
+
 const EditProduct = (props) => {
   const router = useRouter();
   const { productid } = router.query;
@@ -98,109 +104,127 @@ const EditProduct = (props) => {
   };
 
   return (
-    <div className="container">
+    <div className="container ">
+      <a
+        className={back.back}
+        onClick={() => {
+          router.back();
+        }}
+      >
+        <h4>{"< ย้อนกลับ"}</h4>
+      </a>
       {loading ? (
         <Loading loading={loading} />
       ) : (
         <div className={classes.contianer__edit}>
-          <div className="input-group mb-3">
-            <span className="input-group-text">ชื่อผลิตภัณฑ์</span>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="กรุณาพิมพ์ชื่อผลิตภัณฑ์"
-              value={productName}
-              onChange={(e) => {
-                setProductName(e.target.value);
-              }}
-            />
-          </div>
-          <div className="input-group mb-3">
-            <span className="input-group-text">คำอธิบายเพิ่มเติม</span>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="กรุณาพิมพ์คำอธิบาย"
-              value={productDetail}
-              onChange={(e) => {
-                setProductDetail(e.target.value);
-              }}
-            />
-          </div>
-          <div className="input-group mb-3">
-            <span className="input-group-text">ราคาต่อชิ้น</span>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="กรุณาพิมพ์ราคาสินค้า"
-              value={price}
-              onChange={(e) => {
-                setPrice(e.target.value);
-              }}
-            />
-            <span className="input-group-text">บาท</span>
-          </div>
-          <div className="input-group mb-3">
-            <span className="input-group-text">จำนวนสินค้าที่จำหน่าย</span>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="กรุณาพิมพ์จำนวนสินค้า"
-              value={amount}
-              onChange={(e) => {
-                setAmount(e.target.value);
-              }}
-            />
-            <span className="input-group-text">ชิ้น</span>
-          </div>
-          <div className="input-group mb-3">
-            <span className="input-group-text">สถานะสินค้า</span>
-            <div
-              className={
-                classes.checkbok__edit + " " + "form-check form-switch"
-              }
-            >
+          <div className={classes.subContainer__edit}>
+            <span className={"mb-5 h2"}>แก้ไขสินค้า</span>
+            <div className={style.forDeiv}>
+              <span className={style.forSpan}>ชื่อสินค้า</span>
               <input
-                className={"form-check-input"}
-                type="checkbox"
-                style={{ height: "30px", width: "70px", margin: "0 20px" }}
-                checked={productStatus}
-                onChange={() => {
-                  setProductStatus(!productStatus);
+                type="text"
+                className="form-control"
+                placeholder="กรุณาพิมพ์ชื่อสินค้า"
+                value={productName}
+                onChange={(e) => {
+                  setProductName(e.target.value);
                 }}
               />
-              <label className="form-check-label">
-                {productStatus ? "วางจำหน่ายสินค้า" : "ยังไม่ได้วางจำหน่าย"}
-              </label>
             </div>
-          </div>
-          <span className="input-group-text">รูปภาพผลิตภัณฑ์</span>
-          <img className={classes.image__edit} src={previewImage} />
-          <div className="input-group mb-3 mt-3">
-            <span className="input-group-text primary">เลือกรูปภาพสินค้า</span>
-            <input
-              type="file"
-              className="form-control"
-              onChange={(e) => {
-                setUpdateImage(true);
-                preViewImage(e.target.files[0]);
-                setImageFile(e.target.files[0]);
-              }}
-            />
-          </div>
-
-          <button onClick={editProduct} className="btn btn-primary fs-5">
-            บันทึกการแก้ไข
-          </button>
-
-          <div>
-            {!productAdd ? (
-              <label
-                className={classes.alert__addproduct + " " + "bg-warning "}
+            <div className={style.forDeiv}>
+              <span className={style.forSpan}>คำอธิบายเพิ่มเติม</span>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="กรุณาพิมพ์คำอธิบาย"
+                value={productDetail}
+                onChange={(e) => {
+                  setProductDetail(e.target.value);
+                }}
+              />
+            </div>
+            <div className={style.forDeiv}>
+              <span className={style.forSpan}>ราคาต่อชิ้น</span>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="กรุณาพิมพ์ราคาสินค้า"
+                value={price}
+                onChange={(e) => {
+                  setPrice(e.target.value);
+                }}
+              />
+              <span className={style.forSpan}>บาท</span>
+            </div>
+            <div className={style.forDeiv}>
+              <span className={style.forSpan}>จำนวนสินค้าที่จำหน่าย</span>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="กรุณาพิมพ์จำนวนสินค้า"
+                value={amount}
+                onChange={(e) => {
+                  setAmount(e.target.value);
+                }}
+              />
+              <span className={style.forSpan}>ชิ้น</span>
+            </div>
+            <div className={style.forDeiv}>
+              <span className={style.forSpan}>สถานะสินค้า</span>
+              <div
+                className={
+                  classes.checkbok__edit + " " + "form-check form-switch"
+                }
               >
-                กรุณาใส่ข้อมูลให้ครบทุกช่อง
-              </label>
-            ) : null}
+                <input
+                  className={"form-check-input"}
+                  type="checkbox"
+                  style={{ height: "30px", width: "70px", margin: "0 20px" }}
+                  checked={productStatus}
+                  onChange={() => {
+                    setProductStatus(!productStatus);
+                  }}
+                />
+                <label className="form-check-label">
+                  {productStatus ? "วางจำหน่ายสินค้า" : "ยังไม่ได้วางจำหน่าย"}
+                </label>
+              </div>
+            </div>
+            <div className={style.forDeiv}>
+              <span className={style.forSpan + " " + "w-100"}>
+                รูปภาพสินค้า
+              </span>
+            </div>
+            <img className={classes.image__edit} src={previewImage} />
+            <div className="input-group mb-3 mt-3">
+              <span className={style.forSpan}>เลือกรูปภาพสินค้า</span>
+              <input
+                type="file"
+                className="form-control"
+                onChange={(e) => {
+                  setUpdateImage(true);
+                  preViewImage(e.target.files[0]);
+                  setImageFile(e.target.files[0]);
+                }}
+              />
+            </div>
+
+            <button
+              onClick={editProduct}
+              className="btn btn-primary fs-5 w-100"
+            >
+              บันทึกการแก้ไข
+            </button>
+
+            <div>
+              {!productAdd ? (
+                <label
+                  className={classes.alert__addproduct + " " + "bg-warning "}
+                >
+                  กรุณาใส่ข้อมูลให้ครบทุกช่อง
+                </label>
+              ) : null}
+            </div>
           </div>
         </div>
       )}

@@ -1,17 +1,19 @@
 .container__staff{
-    min-height: 300px;
-    max-height: 700px;
-    width: 100%;
+    min-height: 700px;
+    max-height: auto;
+    width: 90%;
     margin: 0 auto;
     padding: 0 20px;
     display:flex;
     justify-content: center;
     flex-wrap: wrap;
+    background-color: #CDD8E1;
+    padding-top: 40px;
 }
 
 .block__staff{
     position: relative;
-    min-height: 300px;
+    min-height: 600px;
     height: 100%;
     max-height: 700px;
     width: 100%;

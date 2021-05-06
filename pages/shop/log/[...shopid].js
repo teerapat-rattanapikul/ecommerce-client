@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Fragment } from "react";
 import Loading from "../../../components/ui/Loading";
 import jwt_decode from "jwt-decode";
+import back from "../manage/shopid.module.css";
 const log = () => {
   const [userLog, setUserLog] = useState([]);
   const [userLogSelect, setUserLogSelect] = useState(true);
@@ -88,7 +89,15 @@ const log = () => {
   };
 
   return (
-    <div className="container container  shadow  bg-body rounded">
+    <div className="container ">
+      <a
+        className={back.back}
+        onClick={() => {
+          router.back();
+        }}
+      >
+        <h4>{"< ย้อนกลับ"}</h4>
+      </a>
       {loading ? (
         <Loading loading={loading} />
       ) : (
@@ -135,12 +144,13 @@ const log = () => {
                 <Fragment>
                   {orderLogSelect ? (
                     <tr>
-                      <th scope="col">รายชื่อผลิตภัณฑ์</th>
+                      <th scope="col">วันที่สั่งซื้อ</th>
+                      <th scope="col">รายชื่อสินค้า</th>
                       <th scope="col">การจัดการ</th>
                     </tr>
                   ) : (
                     <tr>
-                      <th scope="col">รายชื่อผลิตภัณฑ์</th>
+                      <th scope="col">รายชื่อสินค้า</th>
                       <th scope="col">รายชื่อลูกค้า</th>
                       <th scope="col">การเปลี่ยนแปลงสถานะ</th>
                       <th scope="col">เปลี่ยนสถานะโดย</th>
@@ -165,6 +175,7 @@ const log = () => {
                   <tbody className={"align-middle "}>
                     {orderLog.map((order) => (
                       <tr key={order.id}>
+                        <td>{dayMonthYear(order.createdAt)}</td>
                         <td>{order.product.name}</td>
                         <td>
                           <button

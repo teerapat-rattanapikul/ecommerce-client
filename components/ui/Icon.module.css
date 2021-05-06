@@ -4,8 +4,24 @@
     margin-left:10px;
     font-weight: bold;
     cursor: pointer;
+
 }
+
+.active{
+    font-size: 50px;
+    text-shadow: -1px 1px 10px rgba(0, 0, 0, 0.75);
+    margin-left:10px;
+    font-weight: bold;
+    cursor: pointer;
+    color:white
+}
+
+.active:hover{
+    font-size: 55px;
+    color: white;
+}
+
 .icon:hover{
-    font-size: 60px;
+    font-size: 55px;
     color:rgba(0, 0, 0, 0.6)
 }

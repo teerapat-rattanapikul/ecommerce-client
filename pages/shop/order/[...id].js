@@ -6,6 +6,7 @@ import classes from "./order.module.css";
 import { useRouter } from "next/router";
 import OrderComponent from "../../../components/ui/Order";
 import jwt_decode from "jwt-decode";
+import back from "../manage/shopid.module.css";
 const Order = (props) => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -51,7 +52,15 @@ const Order = (props) => {
     });
   };
   return (
-    <div className="container container  shadow  bg-body rounded">
+    <div className="container">
+      <a
+        className={back.back}
+        onClick={() => {
+          router.back();
+        }}
+      >
+        <h4>{"< ย้อนกลับ"}</h4>
+      </a>
       {loading ? (
         <Loading loading={loading} />
       ) : (

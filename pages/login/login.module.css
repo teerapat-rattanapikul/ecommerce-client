@@ -1,5 +1,11 @@
+.container__login{
+    width: 40%;
+    padding:80px 40px;
+    min-height: 300px;
+}
+
 .form__login{
-    width: 30%;
+    width: 100%;
     min-height: 400px;
     margin: 0 auto;
     align-self: center;

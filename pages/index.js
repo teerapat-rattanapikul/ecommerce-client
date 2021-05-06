@@ -56,7 +56,7 @@ function Home(props) {
   }
 
   return (
-    <div className="container  shadow  bg-body rounded">
+    <div className="container">
       {loading ? (
         <Loading loading={loading} />
       ) : (

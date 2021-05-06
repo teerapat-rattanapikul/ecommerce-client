@@ -38,7 +38,15 @@ const ShopDetail = (props) => {
   }
 
   return (
-    <div className="container container  shadow  bg-body rounded">
+    <div className="container">
+      <a
+        className={classes.back}
+        onClick={() => {
+          router.back({}, {}, { scroll: false });
+        }}
+      >
+        <h4>{"< ย้อนกลับ"}</h4>
+      </a>
       {loading ? (
         <Loading loading={loading} />
       ) : (

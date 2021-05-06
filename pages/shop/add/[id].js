@@ -4,9 +4,11 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { connect } from "react-redux";
 import jwt_decode from "jwt-decode";
+import back from "../manage/shopid.module.css";
 const AddShop = (props) => {
   const [shopName, setShopName] = useState("");
   const [errName, setErrName] = useState(false);
+  const [errMsg, setErrMsg] = useState("");
   const router = useRouter();
   const createShop = () => {
     const decoded = jwt_decode(router.query.id);
@@ -24,45 +26,48 @@ const AddShop = (props) => {
           "Content-Type": "application/json",
         },
       }).then((res) => {
-        if (res.data === true) {
+        if (res.data.status === true) {
           router.replace("/");
         } else {
           setErrName(true);
+          setErrMsg(res.data.errMsg);
         }
       });
     }
   };
 
   return (
-    <div className="container container  shadow  bg-body rounded">
+    <div className={classes.block__add + " " + "container "}>
+      <a
+        className={back.back}
+        onClick={() => {
+          router.back();
+        }}
+      >
+        <h4>{"< ย้อนกลับ"}</h4>
+      </a>
       <div className={classes.contianer__add}>
-        <label className={classes.title__add}>Add shop</label>
-        <label className={classes.text__add}>Shop name:</label>
+        <label className={classes.title__add}>เปิดร้าน</label>
+        <label className={classes.text__add}>ชื่อร้าน:</label>
         <input
           type="text"
           value={shopName}
-          className={classes.input__add}
-          placeholder="type your shop name"
+          className={"form-label p-2"}
+          placeholder="กรุณาใส่ช่ือร้าน"
           onChange={(e) => {
             setShopName(e.target.value);
           }}
         />
         <input
           type="submit"
-          className={classes.submit__add}
-          value="create"
+          className={"btn btn-success"}
+          value="ตั้งร้าน"
           onClick={createShop}
         />
-        {errName ? (
-          <div className={classes.error__add}>Cannot use this shop name</div>
-        ) : (
-          <></>
-        )}
+        {errName ? <div className={classes.error__add}>{errMsg}</div> : <></>}
       </div>
     </div>
   );
 };
-const MapStatetoProps = (state) => ({
-  user: state.user,
-});
-export default connect(MapStatetoProps)(AddShop);
+
+export default AddShop;
