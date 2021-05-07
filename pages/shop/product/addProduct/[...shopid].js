@@ -37,6 +37,7 @@ const AddProduct = () => {
       price.trim() === "" ||
       amount.trim() === ""
     ) {
+      alert("กรุณาใส่ข้อมูลให้ครบทุกช่อง");
       setProductAdd(false);
     } else {
       formData.append("productImage", imageFile);
@@ -145,7 +146,14 @@ const AddProduct = () => {
             />
           </div>
 
-          <button onClick={addProduct} className="btn btn-primary fs-5 w-100">
+          <button
+            onClick={() => {
+              if (window.confirm("ต้องการเพิ่มสินค้าหรือไม่?")) {
+                addProduct();
+              }
+            }}
+            className="btn btn-primary fs-5 w-100"
+          >
             บันทึก
           </button>
           {!productAdd ? (

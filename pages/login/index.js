@@ -2,6 +2,7 @@ import classes from "./login.module.css";
 import axios from "axios";
 import { Fragment, useEffect, useState } from "react";
 import Redirect from "../../components/Redirect";
+import { useCookies } from "react-cookie";
 const Login = (props) => {
   const [login, setLogin] = useState(true);
   const [errLogin, setErrLogin] = useState(false);
@@ -10,7 +11,7 @@ const Login = (props) => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [userLogin, setUserLogin] = useState(false);
-
+  const [cookie, setCookie] = useCookies(["token"]);
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) setUserLogin(true);
@@ -53,6 +54,7 @@ const Login = (props) => {
         if (res.data.status === true) {
           if (login) {
             localStorage.setItem("token", res.data.token);
+            setCookie("token", res.data.token, { path: "/" });
             setUserLogin(true);
             window.location.href = "/";
           } else {

@@ -1,12 +1,12 @@
 import classes from "./log.module.css";
 import { useRouter } from "next/router";
 import axios from "axios";
-import { useState } from "react";
-import { Fragment } from "react";
+import { useState, useEffect, Fragment } from "react";
 import Loading from "../../../components/ui/Loading";
 import jwt_decode from "jwt-decode";
 import back from "../manage/shopid.module.css";
-const log = () => {
+import { translateStatus } from "../../../helppers/transletStatus";
+const log = (props) => {
   const [userLog, setUserLog] = useState([]);
   const [userLogSelect, setUserLogSelect] = useState(true);
   const [orderDetailLog, setOrderDetailLog] = useState([]);
@@ -15,46 +15,62 @@ const log = () => {
   const [orderLog, setOrderLog] = useState([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const { shopid } = router.query;
-
-  if (loading && shopid) {
-    const decoded = jwt_decode(shopid[0]);
-    const validToken = localStorage.getItem("token");
-    if (validToken !== shopid[0]) {
-      alert("คุณไม่มีสิทธิ๋ในการเข้าถึง");
-      router.replace("/login");
-    }
-    axios({
-      url: `http://localhost:8000/api/user/log`,
-      method: "post",
-      data: { shopId: shopid[1], userId: decoded.user.id },
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((res) => {
-      if (!res.data) {
-        alert("คุณไม่มีสิทธิ์ในการเข้าถึงข้อมูล");
+  useEffect(() => {
+    try {
+      const decoded = jwt_decode(localStorage.getItem("token"));
+      if (decoded.user.id !== props.staff.merchant) {
+        alert("คุณไม่มีสิทธิ๋ในการเข้าถึง");
         router.replace("/login");
       } else {
-        setUserLog(res.data);
-        axios({
-          url: `http://localhost:8000/api/order/merChantGetOrder`,
-          method: "post",
-          data: { shopId: shopid },
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }).then((res) => {
-          setOrderLog(res.data);
-          setLoading(false);
-        });
+        setUserLog(props.staff.staff);
+        setOrderLog(props.order);
+        setLoading(false);
       }
-    });
-  }
+    } catch (error) {
+      if (error) {
+        alert("คุณไม่มีสิทธิ๋ในการเข้าถึง");
+        router.replace("/login");
+      }
+    }
+  }, []);
+  // if (loading && shopid) {
+  //   const decoded = jwt_decode(shopid[0]);
+  //   const validToken = localStorage.getItem("token");
+  //   if (validToken !== shopid[0]) {
+  //     alert("คุณไม่มีสิทธิ๋ในการเข้าถึง");
+  //     router.replace("/login");
+  //   }
+  //   axios({
+  //     url: `http://localhost:8000/api/user/log`,
+  //     method: "post",
+  //     data: { shopId: shopid[1], userId: decoded.user.id },
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   }).then((res) => {
+  //     if (!res.data) {
+  //       alert("คุณไม่มีสิทธิ์ในการเข้าถึงข้อมูล");
+  //       router.replace("/login");
+  //     } else {
+  //       setUserLog(res.data);
+  //       axios({
+  //         url: `http://localhost:8000/api/order/merChantGetOrder`,
+  //         method: "post",
+  //         data: { shopId: shopid },
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }).then((res) => {
+  //         setOrderLog(res.data);
+  //         setLoading(false);
+  //       });
+  //     }
+  //   });
+  // }
 
   const dayMonthYear = (dateTime) => {
     const NewDateTime = new Date(dateTime);
-    const hour = NewDateTime.getUTCHours();
+    const hour = NewDateTime.getUTCHours() + 7;
     const minute = NewDateTime.getUTCMinutes();
     const month = NewDateTime.getUTCMonth() + 1; //months from 1-12
     const day = NewDateTime.getUTCDate();
@@ -74,7 +90,6 @@ const log = () => {
   };
 
   const orderLogDetail = (orderId) => {
-    console.log(orderId);
     axios({
       url: `http://localhost:8000/api/order/logDetail`,
       method: "post",
@@ -193,12 +208,36 @@ const log = () => {
                   </tbody>
                 ) : (
                   <tbody className={"align-middle "}>
-                    {orderDetailLog.map((orderLog) => (
+                    {orderDetailLog.map((orderLog, index) => (
                       <tr key={orderLog.id}>
                         <td>{productLog}</td>
                         <td>{orderLog.user.name}</td>
                         <td>
-                          {orderLog.oldStatus} {"-->"} {orderLog.newStatus}
+                          <label
+                            style={{
+                              color:
+                                orderLog.oldStatus === "Cancle"
+                                  ? "red"
+                                  : orderLog.oldStatuss === "Success"
+                                  ? "green"
+                                  : "#c96f00",
+                            }}
+                          >
+                            {translateStatus(orderLog.oldStatus)}
+                          </label>
+                          {"-->"}{" "}
+                          <label
+                            style={{
+                              color:
+                                orderLog.newStatus === "Cancle"
+                                  ? "red"
+                                  : orderLog.newStatus === "Success"
+                                  ? "green"
+                                  : "#c96f00",
+                            }}
+                          >
+                            {translateStatus(orderLog.newStatus)}
+                          </label>
                         </td>
                         <td>{orderLog.staff}</td>
                         <td>{dayMonthYear(orderLog.createdAt)}</td>
@@ -228,5 +267,29 @@ const log = () => {
     </div>
   );
 };
+export const getServerSideProps = async (context) => {
+  const { shopid } = context.query;
+  const staff = await axios({
+    url: `http://localhost:8000/api/user/log`,
+    method: "post",
+    data: { shopId: shopid[1] },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: shopid[0],
+    },
+  });
+  const order = await axios({
+    url: `http://localhost:8000/api/order/merChantGetOrder`,
+    method: "post",
+    data: { shopId: shopid[1] },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: shopid[0],
+    },
+  });
 
+  return {
+    props: { staff: staff.data, order: order.data },
+  };
+};
 export default log;

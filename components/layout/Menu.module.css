@@ -1,13 +1,17 @@
 .container__menu{
     margin: 0 auto;
     width: 97%;
-    /* display:flex; */
+    display:flex;
     justify-content:center;
     flex-wrap: wrap;
+    flex-direction: row;
     justify-content:left;
-    /* padding-left:2% */
 }
 .block__item{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     margin:9px;
     background-color: #8a9bae;
     width: 400px;
@@ -16,7 +20,10 @@
     font-size: 30px;
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.75);
 }
-
+.adminshop{
+    font-size: 1rem;
+    color: #8b582a
+}
 .block__item:hover{
     width: 398px;
     height: 298px;

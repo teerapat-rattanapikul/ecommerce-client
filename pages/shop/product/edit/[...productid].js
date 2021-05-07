@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Loading from "../../../../components/ui/Loading";
 import classes from "./edit.module.css";
 import jwt_decode from "jwt-decode";
@@ -12,7 +12,6 @@ const style = {
 
 const EditProduct = (props) => {
   const router = useRouter();
-  const { productid } = router.query;
   const [loading, setLoading] = useState(true);
   const [image, setImage] = useState("");
   const [previewImage, setPreviewImage] = useState("");
@@ -25,51 +24,79 @@ const EditProduct = (props) => {
   const [amount, setAmount] = useState(0);
   const [productAdd, setProductAdd] = useState(true);
   const [updateImage, setUpdateImage] = useState(false);
-
-  if (productid && loading) {
-    const decoded = jwt_decode(productid[0]);
-    const validToken = localStorage.getItem("token");
-    if (validToken !== productid[0]) {
-      alert("คุณไม่มีสิทธิ๋ในการเข้าถึง");
-      router.replace("/login");
-    }
-    axios({
-      url: `http://localhost:8000/api/product/getDetail`,
-      method: "post",
-      data: {
-        productId: productid[2],
-        shopId: productid[1],
-        userId: decoded.user.id,
-      },
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((res) => {
-      if (!res.data) {
-        alert("คุณไม่มีสิทธิ์ในการเข้าถึงข้อมูล");
+  useEffect(() => {
+    try {
+      const decoded = jwt_decode(localStorage.getItem("token"));
+      if (decoded.user.id !== props.data.merchant) {
+        alert("คุณไม่มีสิทธิ๋ในการเข้าถึง");
         router.replace("/login");
       } else {
-        setProductId(res.data.id);
-        setPreviewImage(`http://localhost:8000/${res.data.image}`);
-        setProductName(res.data.name);
-        setProductDetail(res.data.detail);
-        setProductStatus(res.data.status);
-        setPrice(res.data.price);
-        setAmount(res.data.amount);
-        setImage(res.data.image);
+        setProductId(props.data.productDetail.id);
+        setPreviewImage(
+          `http://localhost:8000/${props.data.productDetail.image}`
+        );
+        setProductName(props.data.productDetail.name);
+        setProductDetail(props.data.productDetail.detail);
+        setProductStatus(props.data.productDetail.status);
+        setPrice(props.data.productDetail.price);
+        setAmount(props.data.productDetail.amount);
+        setImage(props.data.productDetail.image);
         setLoading(false);
       }
-    });
-  }
+    } catch (error) {
+      if (error) {
+        alert("คุณไม่มีสิทธิ๋ในการเข้าถึง");
+        router.replace("/login");
+      }
+    }
+  }, []);
+  // if (productid && loading) {
+  //   const decoded = jwt_decode(productid[0]);
+  //   const validToken = localStorage.getItem("token");
+  //   if (validToken !== productid[0]) {
+  //     alert("คุณไม่มีสิทธิ๋ในการเข้าถึง");
+  //     router.replace("/login");
+  //   }
+  //   axios({
+  //     url: `http://localhost:8000/api/product/getDetail`,
+  //     method: "post",
+  //     data: {
+  //       productId: productid[2],
+  //       shopId: productid[1],
+  //       userId: decoded.user.id,
+  //     },
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   }).then((res) => {
+  //     if (!res.data) {
+  //       alert("คุณไม่มีสิทธิ์ในการเข้าถึงข้อมูล");
+  //       router.replace("/login");
+  //     } else {
+  // setProductId(res.data.id);
+  // setPreviewImage(`http://localhost:8000/${res.data.image}`);
+  // setProductName(res.data.name);
+  // setProductDetail(res.data.detail);
+  // setProductStatus(res.data.status);
+  // setPrice(res.data.price);
+  // setAmount(res.data.amount);
+  // setImage(res.data.image);
+  //       setLoading(false);
+  //     }
+  //   });
+  // }
 
   const editProduct = () => {
     var formData = new FormData();
     if (
       productName.trim() === "" ||
       productDetail.trim() === "" ||
-      price === 0 ||
-      amount === 0
+      price.toString().trim() === "" ||
+      amount.toString().trim() === "" ||
+      amount.toString() === "0" ||
+      amount.toString() === "0"
     ) {
+      alert("กรุณาใส่ข้อมูลให้ครบทุกช่อง");
       setProductAdd(false);
     } else {
       if (updateImage) {
@@ -169,27 +196,7 @@ const EditProduct = (props) => {
               />
               <span className={style.forSpan}>ชิ้น</span>
             </div>
-            <div className={style.forDeiv}>
-              <span className={style.forSpan}>สถานะสินค้า</span>
-              <div
-                className={
-                  classes.checkbok__edit + " " + "form-check form-switch"
-                }
-              >
-                <input
-                  className={"form-check-input"}
-                  type="checkbox"
-                  style={{ height: "30px", width: "70px", margin: "0 20px" }}
-                  checked={productStatus}
-                  onChange={() => {
-                    setProductStatus(!productStatus);
-                  }}
-                />
-                <label className="form-check-label">
-                  {productStatus ? "วางจำหน่ายสินค้า" : "ยังไม่ได้วางจำหน่าย"}
-                </label>
-              </div>
-            </div>
+
             <div className={style.forDeiv}>
               <span className={style.forSpan + " " + "w-100"}>
                 รูปภาพสินค้า
@@ -208,9 +215,33 @@ const EditProduct = (props) => {
                 }}
               />
             </div>
-
+            <div className={style.forDeiv}>
+              <span className={style.forSpan}>สถานะสินค้า</span>
+              <div
+                className={
+                  classes.checkbok__edit + " " + "form-check form-switch"
+                }
+              >
+                <input
+                  className={"form-check-input "}
+                  type="checkbox"
+                  style={{ height: "30px", width: "70px", margin: "0 20px" }}
+                  checked={productStatus}
+                  onChange={() => {
+                    setProductStatus(!productStatus);
+                  }}
+                />
+                <label className="form-check-label">
+                  {productStatus ? "วางจำหน่ายสินค้า" : "ยังไม่ได้วางจำหน่าย"}
+                </label>
+              </div>
+            </div>
             <button
-              onClick={editProduct}
+              onClick={() => {
+                if (window.confirm("ต้องการแก้ไขสินค้าหรือไม่?")) {
+                  editProduct();
+                }
+              }}
               className="btn btn-primary fs-5 w-100"
             >
               บันทึกการแก้ไข
@@ -231,5 +262,22 @@ const EditProduct = (props) => {
     </div>
   );
 };
-
+export const getServerSideProps = async (context) => {
+  const { productid } = context.query;
+  const data = await axios({
+    url: `http://localhost:8000/api/product/getDetail`,
+    method: "post",
+    data: {
+      productId: productid[2],
+      shopId: productid[1],
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: productid[0],
+    },
+  });
+  return {
+    props: { data: data.data },
+  };
+};
 export default EditProduct;

@@ -1,41 +1,57 @@
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import classes from "./productlist.module.css";
 import Loading from "../../../../components/ui/Loading";
 import jwt_decode from "jwt-decode";
 import back from "../../manage/shopid.module.css";
 import { numberWithCommas } from "../../../../helppers/moneyFormat";
-const ProductList = () => {
+const ProductList = (props) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-
-  if (loading && router.query.shopid) {
-    const decoded = jwt_decode(router.query.shopid[0]);
-    const validToken = localStorage.getItem("token");
-    if (validToken !== router.query.shopid[0]) {
-      console.log(validToken);
-      alert("คุณไม่มีสิทธิ๋ในการเข้าถึง");
-      router.replace("/login");
-    }
-    axios({
-      url: `http://localhost:8000/api/product/merChantGetAll`,
-      method: "post",
-      data: { shopId: router.query.shopid[1], userId: decoded.user.id },
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((res) => {
-      if (!res.data) {
-        alert("คุณไม่มีสิทธิ์ในการเข้าถึงข้อมูล");
+  useEffect(() => {
+    try {
+      const decoded = jwt_decode(localStorage.getItem("token"));
+      if (decoded.user.id !== props.data.merchant) {
+        alert("คุณไม่มีสิทธิ๋ในการเข้าถึง");
         router.replace("/login");
       } else {
-        setProducts(res.data);
+        setProducts(props.data.product);
         setLoading(false);
       }
-    });
-  }
+    } catch (error) {
+      if (error) {
+        alert("คุณไม่มีสิทธิ๋ในการเข้าถึง");
+        router.replace("/login");
+      }
+    }
+  }, []);
+  // if (loading && router.query.shopid) {
+  //   const decoded = jwt_decode(router.query.shopid[0]);
+  //   const validToken = localStorage.getItem("token");
+  //   if (validToken !== router.query.shopid[0]) {
+  //     console.log(validToken);
+  //     alert("คุณไม่มีสิทธิ๋ในการเข้าถึง");
+  //     router.replace("/login");
+  //   }
+  //   axios({
+  //     url: `http://localhost:8000/api/product/merChantGetAll`,
+  //     method: "post",
+  //     data: { shopId: router.query.shopid[1], userId: decoded.user.id },
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   }).then((res) => {
+  //     if (!res.data) {
+  //       alert("คุณไม่มีสิทธิ์ในการเข้าถึงข้อมูล");
+  //       router.replace("/login");
+  //     } else {
+  //       setProducts(res.data);
+  //       setLoading(false);
+  //     }
+  //   });
+  // }
 
   return (
     <div className="container">
@@ -54,7 +70,7 @@ const ProductList = () => {
           {products.length === 0 ? (
             <div className={classes.empty__productList}>
               <img src="/emptyProduct.svg" height={120} width={120} />
-              <span>ไม่มีสินผลิตภัณฑ์ในคลังสินค้า</span>
+              <span>ไม่มีสินค้าในคลังสินค้า</span>
             </div>
           ) : (
             <table className="table table-striped">
@@ -123,4 +139,19 @@ const ProductList = () => {
   );
 };
 
+export const getServerSideProps = async (context) => {
+  const { shopid } = context.query;
+  const data = await axios({
+    url: `http://localhost:8000/api/product/merChantGetAll`,
+    method: "post",
+    data: { shopId: shopid[1] },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: shopid[0],
+    },
+  });
+  return {
+    props: { data: data.data },
+  };
+};
 export default ProductList;

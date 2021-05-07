@@ -28,14 +28,6 @@
     font-size: 30px;
     font-weight: bold;
 }
-.input__login{
-    height: 40px;
-    background-color: rgb(206, 206, 206);
-    color:black;
-    padding:0 10px;
-    font-size: 1rem;
-}
-
 .input_secure{
     -webkit-text-security: disc;
 }

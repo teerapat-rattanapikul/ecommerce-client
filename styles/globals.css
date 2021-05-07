@@ -47,7 +47,7 @@ a {
   max-height: auto;
   position: relative;
   padding:50px 0;
-  box-shadow: 0px 1px 10px #130e0b;
+  box-shadow: 0px 1px 10px #000000;
   overflow: auto;
   position: relative;
 }

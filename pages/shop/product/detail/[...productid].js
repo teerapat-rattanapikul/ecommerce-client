@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import classes from "./detail.module.css";
 import Loading from "../../../../components/ui/Loading";
 import jwt_decode from "jwt-decode";
@@ -13,36 +13,51 @@ const ProductDetail = (props) => {
   const { productid } = router.query;
   const [product, setProduct] = useState();
   const [loading, setLoading] = useState(true);
-
-  if (productid && loading) {
-    const decoded = jwt_decode(productid[0]);
-    const validToken = localStorage.getItem("token");
-    if (validToken !== router.query.productid[0]) {
-      alert("คุณไม่มีสิทธิ๋ในการเข้าถึง");
-      router.replace("/login");
-    }
-    axios({
-      url: `http://localhost:8000/api/product/getDetail`,
-      method: "post",
-      data: {
-        productId: productid[2],
-        shopId: productid[1],
-        userId: decoded.user.id,
-      },
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((res) => {
-      if (!res.data) {
-        alert("คุณไม่มีสิทธิ์ในการเข้าถึงข้อมูล");
+  useEffect(() => {
+    try {
+      const decoded = jwt_decode(localStorage.getItem("token"));
+      if (decoded.user.id !== props.data.merchant) {
+        alert("คุณไม่มีสิทธิ๋ในการเข้าถึง");
         router.replace("/login");
       } else {
-        setProduct(res.data);
+        setProduct(props.data.productDetail);
         setLoading(false);
       }
-    });
-  }
-
+    } catch (error) {
+      if (error) {
+        alert("คุณไม่มีสิทธิ๋ในการเข้าถึง");
+        router.replace("/login");
+      }
+    }
+  }, []);
+  // if (productid && loading) {
+  //   const decoded = jwt_decode(productid[0]);
+  //   const validToken = localStorage.getItem("token");
+  //   if (validToken !== router.query.productid[0]) {
+  //     alert("คุณไม่มีสิทธิ๋ในการเข้าถึง");
+  //     router.replace("/login");
+  //   }
+  //   axios({
+  //     url: `http://localhost:8000/api/product/getDetail`,
+  //     method: "post",
+  //     data: {
+  //       productId: productid[2],
+  //       shopId: productid[1],
+  //       userId: decoded.user.id,
+  //     },
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   }).then((res) => {
+  //     if (!res.data) {
+  //       alert("คุณไม่มีสิทธิ์ในการเข้าถึงข้อมูล");
+  //       router.replace("/login");
+  //     } else {
+  //       setProduct(res.data);
+  //       setLoading(false);
+  //     }
+  //   });
+  // }
   return (
     <div className="container">
       <a
@@ -109,5 +124,22 @@ const ProductDetail = (props) => {
     </div>
   );
 };
-
+export const getServerSideProps = async (context) => {
+  const { productid } = context.query;
+  const data = await axios({
+    url: `http://localhost:8000/api/product/getDetail`,
+    method: "post",
+    data: {
+      productId: productid[2],
+      shopId: productid[1],
+    },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: productid[0],
+    },
+  });
+  return {
+    props: { data: data.data },
+  };
+};
 export default ProductDetail;

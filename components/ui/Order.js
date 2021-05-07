@@ -1,8 +1,10 @@
 import { useState, Fragment } from "react";
 import classes from "./Order.module.css";
+import { translateStatus } from "../../helppers/transletStatus";
 const OrderComponent = (props) => {
   const [updateStatus, setUpdateStatus] = useState(false);
   const [orderStatus, setOrderStatus] = useState("");
+
   return (
     <tr>
       <td>{props.productName}</td>
@@ -18,7 +20,18 @@ const OrderComponent = (props) => {
       <td>{props.totalAmount}</td>
       <td>{props.totalPrice}</td>
 
-      <td>{props.status}</td>
+      <td
+        style={{
+          color:
+            props.status === "Cancle"
+              ? "red"
+              : props.status === "Success"
+              ? "green"
+              : "#c96f00",
+        }}
+      >
+        {translateStatus(props.status)}
+      </td>
       <td>
         {props.userRole === "admin" ? null : (
           <div className={classes.status__order}>
@@ -31,16 +44,22 @@ const OrderComponent = (props) => {
                   }}
                   value={orderStatus}
                 >
-                  <option value="Paid">Paid</option>
-                  <option value="Shipping">Shipping</option>
-                  <option value="Success">Success</option>
-                  <option value="Cancle">Cancle</option>
+                  <option value="Paid">จ่ายเงินแล้ว</option>
+                  <option value="Shipping">กำลังส่งสินค้า</option>
+                  <option value="Success">ดำเนินการเสร็จสิ้น</option>
+                  <option value="Cancle">ยกเลิกออเดอร์</option>
                 </select>
                 <button
                   className="btn btn-success btn-sm mb-1"
                   onClick={() => {
-                    props.changeStatus(props.id, orderStatus);
-                    setUpdateStatus(!updateStatus);
+                    if (
+                      window.confirm("ต้องการที่จะเปลี่ยนสถานะสินค้าหรือไม่")
+                    ) {
+                      props.changeStatus(props.id, orderStatus);
+                      setUpdateStatus(!updateStatus);
+                    } else {
+                      console.log("ไม่เปลี่ยน");
+                    }
                   }}
                 >
                   บันทึก

@@ -2,11 +2,13 @@ import classes from "./Navbar.module.css";
 import Icon from "../ui/Icon";
 import { useEffect, useState } from "react";
 import { FiLogOut } from "react-icons/fi";
+import { useCookies } from "react-cookie";
 const style = {
   active: classes.navbar + " " + classes.active,
   inactive: classes.navbar,
 };
 const Navbar = () => {
+  const [cookies, removeCookie] = useCookies(["token"]);
   const [navbar, setNavbar] = useState(true);
   const [userLogin, setUserLogin] = useState(false);
   useEffect(() => {
@@ -27,7 +29,9 @@ const Navbar = () => {
   };
 
   return (
-    <div className={navbar ? style.inactive : style.active}>
+    <div
+      className={userLogin ? (navbar ? style.inactive : style.active) : null}
+    >
       {userLogin ? <Icon scroll={navbar} /> : null}
       <div className={classes.container__navbar}>
         {userLogin ? (
@@ -36,8 +40,11 @@ const Navbar = () => {
             color="red"
             style={{ cursor: "pointer" }}
             onClick={() => {
-              localStorage.removeItem("token");
-              window.location.href = "/login";
+              if (window.confirm("ต้องการออกจากระบบหรือไม่?")) {
+                removeCookie("token", { path: "/" });
+                localStorage.removeItem("token");
+                window.location.href = "/login";
+              }
             }}
           />
         ) : null}

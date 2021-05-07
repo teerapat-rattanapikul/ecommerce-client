@@ -1,6 +1,7 @@
 import { Fragment, useEffect } from "react";
 import classes from "./StaffList.module.css";
 import Image from "next/image";
+import { BsFillPersonDashFill } from "react-icons/bs";
 
 const StaffList = (props) => {
   return (
@@ -18,6 +19,17 @@ const StaffList = (props) => {
               return (
                 <div className={classes.content__staffList} key={user.id}>
                   {user.name}
+                  <BsFillPersonDashFill
+                    size="40px"
+                    className={classes.button__staff}
+                    onClick={() => {
+                      if (
+                        window.confirm(`ต้องการเลิกจ้าง ${user.name} หรือไม่? `)
+                      ) {
+                        props.unHire(user.id, user.name);
+                      }
+                    }}
+                  />
                 </div>
               );
             }

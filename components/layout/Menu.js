@@ -23,7 +23,10 @@ const Menu = (props) => {
               props.onSelect(shop.shopId, shop.shop.name);
             }}
           >
-            {shop.shop.name}
+            <label> {shop.shop.name}</label>
+            {shop.role === "admin" ? (
+              <label className={classes.adminshop}>ร้านของคุณ</label>
+            ) : null}
           </button>
         ))}
       </Fragment>

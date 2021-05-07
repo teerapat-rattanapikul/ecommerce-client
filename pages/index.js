@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import jwt_decode from "jwt-decode";
 function Home(props) {
   const router = useRouter();
-  const [shopList, setShopList] = useState([]);
+  const [shopList, setShopList] = useState(props.data);
   const [token, setToken] = useState();
   const [loading, setLoading] = useState(true);
   const [addNewShop, setAddNewShop] = useState(true);
@@ -21,7 +21,6 @@ function Home(props) {
       }
     );
   };
-
   useEffect(() => {
     setToken(localStorage.getItem("token"));
     const timeoutId = setTimeout(() => setTime(!time), 3000);
@@ -29,28 +28,17 @@ function Home(props) {
       clearTimeout(timeoutId);
     };
   }, []);
-
   if (time) {
-    if (loading) {
+    if (props.data.status === false) {
       alert("กรุณาเข้าสู่ระบบก่อนใช้งาน");
       router.replace("/login");
     }
   }
-
-  if (token && loading) {
-    const decoded = jwt_decode(token);
-    axios({
-      url: `http://localhost:8000/api/shop/getShop`,
-      method: "post",
-      data: { id: decoded.user.id },
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((res) => {
-      setShopList(res.data);
-      res.data.map((shop) => {
-        if (shop.role === "admin") setAddNewShop(false);
-      });
+  if (props.data.status !== false && loading) {
+    props.data.map((shop) => {
+      if (shop.role === "admin") {
+        setAddNewShop(false);
+      }
     });
     setLoading(false);
   }
@@ -70,5 +58,22 @@ function Home(props) {
     </div>
   );
 }
+
+export const getServerSideProps = async (context) => {
+  const { cookie } = context.req.headers;
+  if (cookie === undefined) return { props: { data: { status: false } } };
+  const token = cookie.replace("token=", "");
+  const data = await axios({
+    url: `http://localhost:8000/api/shop/getShop`,
+    method: "get",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token,
+    },
+  });
+  return {
+    props: { data: data.data }, // will be passed to the page component as props
+  };
+};
 
 export default Home;
