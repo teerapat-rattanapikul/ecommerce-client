@@ -12,11 +12,9 @@ const Navbar = () => {
   const [navbar, setNavbar] = useState(true);
   const [userLogin, setUserLogin] = useState(false);
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
+    if (cookies.token !== "undefined") {
       setUserLogin(true);
     }
-
     window.addEventListener("scroll", scrollChangeBackGround);
   }, []);
 
@@ -27,7 +25,6 @@ const Navbar = () => {
       setNavbar(true);
     }
   };
-
   return (
     <div
       className={userLogin ? (navbar ? style.inactive : style.active) : null}
@@ -41,7 +38,7 @@ const Navbar = () => {
             style={{ cursor: "pointer" }}
             onClick={() => {
               if (window.confirm("ต้องการออกจากระบบหรือไม่?")) {
-                removeCookie("token", { path: "/" });
+                removeCookie("token");
                 localStorage.removeItem("token");
                 window.location.href = "/login";
               }

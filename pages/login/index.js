@@ -54,7 +54,7 @@ const Login = (props) => {
         if (res.data.status === true) {
           if (login) {
             localStorage.setItem("token", res.data.token);
-            setCookie("token", res.data.token, { path: "/" });
+            setCookie("token", res.data.token);
             setUserLogin(true);
             window.location.href = "/";
           } else {

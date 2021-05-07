@@ -42,7 +42,6 @@ function Home(props) {
     });
     setLoading(false);
   }
-
   return (
     <div className="container">
       {loading ? (
